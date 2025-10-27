@@ -3,24 +3,25 @@
 <head>
     <meta charset="UTF-8">
     <title>Acceso de Usuarios</title>
-    <link rel="stylesheet" href="style.css"> <style>
-        /* Ajuste específico para que el login esté en el centro y no ocupe todo el ancho del container */
+    <link rel="stylesheet" href="style.css">
+    <style>
+        /* Ajuste específico para centrar el login en el container */
         .login-box { 
             background-color: white; 
             padding: 30px; 
             border-radius: 8px; 
             box-shadow: 0 0 15px rgba(0, 0, 0, 0.2); 
             width: 300px;
-            margin: auto; /* Centrar */
+            margin: auto;
         }
     </style>
 </head>
 <body>
     <?php
-    // ... (El código PHP y la lógica de conexión/SQLi es la misma que la versión anterior) ...
+    // CONFIGURACIÓN DE LA BASE DE DATOS (¡CORREGIDO!)
     $servername = "localhost";
-    $username = "root";
-    $password = ""; 
+    $username = "ctf_user"; // ¡USUARIO CORREGIDO!
+    $password = "ctf_pass"; // ¡CLAVE CORREGIDA!
     $dbname = "ctf_lab";
     $message = "";
 
@@ -31,10 +32,10 @@
     }
 
     if ($_SERVER["REQUEST_METHOD"] == "POST") {
+        // Consulta SQL VULNERABLE
         $user = $_POST['username'];
         $pass = $_POST['password'];
 
-        // Consulta SQL VULNERABLE
         $sql = "SELECT username, secret_key, role FROM users WHERE username = '$user' AND password_hash = MD5('$pass')";
         
         $result = $conn->query($sql);
@@ -50,7 +51,6 @@
                 $message = "<div class='message success'>ACCESO DE USUARIO CON ÉXITO.<br>Bienvenido, $user. Acceso limitado, no hay clave aquí para ti.</div>";
             }
         } else {
-            // Este error puede ser aprovechado para detectar el tipo de base de datos.
             $message = "<div class='message error'>Usuario o contraseña incorrectos.</div>";
         }
     }

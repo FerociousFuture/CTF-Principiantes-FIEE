@@ -2,21 +2,27 @@
 # -------------------------------------------------------------
 # Script de Configuración de Laboratorio CTF (setup.sh)
 #
-# Este script está diseñado para instalar y configurar todos 
-# los servicios necesarios en una máquina virtual de Fedora Server 
-# para el laboratorio de ciberseguridad (CTF).
+# Este script instala, configura y prepara todos los servicios 
+# y vulnerabilidades en una MV de Fedora Server para el CTF.
 # -------------------------------------------------------------
 
 echo "Made by FerociousFuture"
-echo "Iniciando configuración del laboratorio CTF en Fedora Server."
+echo "Iniciando configuración automática del laboratorio CTF en Fedora Server."
+
+# Variables
+CTF_FILES_DIR="./ctf-files"
+# RUTA CORREGIDA: Apunta a ctf-files/ctf_db_setup.sql
+SQL_SCRIPT="$CTF_FILES_DIR/ctf_db_setup.sql" 
+DB_USER="ctf_user"
+DB_PASS="ctf_pass"
 
 # 1. Instalación de Servicios Esenciales
 ######################################
 
-echo "Paso 1/5: Instalando servidor web (Apache) y base de datos (MariaDB)..."
+echo "Paso 1/7: Instalando servidor web (Apache), PHP, MariaDB y utilidades..."
 
-# Instala Apache HTTP Server, PHP y MariaDB Server
-sudo dnf install httpd php php-mysqlnd mariadb-server -y
+# Instala Apache, PHP, MariaDB y herramientas de seguridad/configuración (semanage)
+sudo dnf install httpd php php-mysqlnd mariadb-server policycoreutils-python-utils -y
 
 if [ $? -ne 0 ]; then
     echo "Error al instalar paquetes. Revise su conexión o los repositorios."
@@ -28,28 +34,44 @@ echo "Paquetes instalados."
 # 2. Habilitación e Inicio de Servicios
 #####################################
 
-echo "Paso 2/5: Habilitando e iniciando servicios..."
+echo "Paso 2/7: Habilitando e iniciando servicios..."
 
-# Habilitar e iniciar Apache
 sudo systemctl enable httpd
 sudo systemctl start httpd
-
-# Habilitar e iniciar MariaDB
 sudo systemctl enable mariadb
 sudo systemctl start mariadb
 
-# Esperar un momento para asegurar que MariaDB esté listo
-sleep 5
+# Dar un pequeño tiempo para que los servicios arranquen
+sleep 5 
 
 echo "Servicios iniciados."
 
-# 3. Configuración de Base de Datos (Seguridad y Usuarios)
-#######################################################
+# 3. Configuración del Firewall y SELinux (Apertura Robusta del Puerto 80)
+#########################################################################
 
-echo "Paso 3/5: Configurando seguridad de MariaDB..."
+echo "Paso 3/7: Configurando Firewall y SELinux..."
 
-# Ejecutar comandos de seguridad iniciales para MariaDB:
-# Limpia usuarios anónimos y la base de datos de prueba
+# 3a. Configuración de Apache para asegurar que escuche en el puerto 80
+sudo sed -i 's/^#Listen 12.34.56.78:80/Listen 80/' /etc/httpd/conf/httpd.conf
+
+# 3b. Configuración del Firewall (abrir por número es más robusto)
+sudo firewall-cmd --zone=public --add-port=80/tcp --permanent
+sudo firewall-cmd --zone=public --add-port=22/tcp --permanent
+sudo firewall-cmd --reload
+
+# 3c. Configuración de SELinux (necesario en Fedora para el puerto 80)
+# Usa -m (modificar) si ya existe la regla, o -a (añadir) si no existe.
+sudo semanage port -a -t http_port_t -p tcp 80 2>/dev/null || sudo semanage port -m -t http_port_t -p tcp 80
+
+sudo systemctl restart httpd # Reiniciar Apache para aplicar cambios de SELinux
+
+echo "Firewall y SELinux configurados. Puerto 80 (HTTP) abierto."
+
+# 4. Limpieza Inicial de MariaDB
+################################
+
+echo "Paso 4/7: Configurando seguridad inicial de MariaDB..."
+
 sudo mysql -u root <<EOF
 DELETE FROM mysql.user WHERE User='';
 DELETE FROM mysql.user WHERE User='root' AND Host NOT IN ('localhost', '127.0.0.1', '::1');
@@ -58,63 +80,64 @@ DELETE FROM mysql.db WHERE Db='test' OR Db='test\_%';
 FLUSH PRIVILEGES;
 EOF
 
-echo "Seguridad básica de MariaDB configurada. (La contraseña de root de MariaDB sigue vacía por defecto)."
+# 5. Configuración de Base de Datos y Usuario de Aplicación
+##########################################################
 
-# 4. Configuración del Firewall
-#################################################################
+echo "Paso 5/7: Creando usuario de aplicación '$DB_USER' y otorgando permisos..."
 
-echo "Paso 4/5: Configurando Firewall (Permitir HTTP/80 y SSH/22 para escaneo)..."
+# 5a. Eliminar usuario si existe (se usa 'EOF' con comillas simples para evitar conflicto de shell)
+sudo mysql -u root <<'EOF'
+DROP USER IF EXISTS 'ctf_user'@'localhost';
+FLUSH PRIVILEGES;
+EOF
 
-# Abrir puertos HTTP (80) y SSH (22) en el firewall
-sudo firewall-cmd --zone=public --add-service=http --permanent
-sudo firewall-cmd --zone=public --add-service=ssh --permanent 
-sudo firewall-cmd --reload
+# 5b. Crear el usuario de la aplicación y otorgar permisos en un solo paso
+sudo mysql -u root <<'EOF'
+GRANT SELECT, INSERT, UPDATE, DELETE ON ctf_lab.* TO 'ctf_user'@'localhost' IDENTIFIED BY 'ctf_pass';
+FLUSH PRIVILEGES;
+EOF
 
-echo "Firewall configurado. Puertos 80 (HTTP) y 22 (SSH) abiertos."
+echo "Usuario '$DB_USER' de MariaDB creado con éxito."
 
-# 5. Preparación del Entorno CTF (Contenido y Vulnerabilidades)
-#############################################################
+# 6. Despliegue de Archivos del CTF y Creación de la Base de Datos
+################################################################
 
-echo "Paso 5/5: Desplegando archivos del CTF y configurando la base de datos..."
+echo "Paso 6/7: Desplegando archivos del CTF y creando la base de datos..."
 
-CTF_FILES_DIR="./ctf-files"
-SQL_SCRIPT="./ctf_db_setup.sql" # Asumimos que el script SQL está en la raíz del repo
-
-# Copia los archivos del CTF a la carpeta web de Apache
+# 6a. Despliegue de Archivos Web y permisos
 if [ -d "$CTF_FILES_DIR/web" ]; then
-    echo "Desplegando contenido web..."
-    sudo rm -rf /var/www/html/* # Limpiamos lo que Apache trae por defecto
-    # Copiar contenido de 'web' y 'images'
-    sudo cp -r "$CTF_FILES_DIR/web"/* /var/www/html/
-    sudo cp -r "$CTF_FILES_DIR/images" /var/www/html/
+    sudo rm -rf /var/www/html/* sudo cp -r "$CTF_FILES_DIR/web"/* /var/www/html/
+    sudo cp -r "$CTF_FILES_DIR/images" /var/www/html/ # Copiar carpeta images
     
-    # Asignar permisos correctos al usuario 'apache'
     sudo chown -R apache:apache /var/www/html
     sudo chmod -R 755 /var/www/html
     echo "Archivos web desplegados en /var/www/html/."
 else
-    echo "ADVERTENCIA: No se encontró la carpeta '$CTF_FILES_DIR/web'. El contenido web no se ha desplegado."
+    echo "ADVERTENCIA: No se encontró la carpeta '$CTF_FILES_DIR/web'."
 fi
 
-# AHORA, EJECUTAMOS EL SCRIPT SQL
+# 6b. Creación y población de la Base de Datos
 if [ -f "$SQL_SCRIPT" ]; then
-    echo "Configurando y llenando la base de datos 'ctf_lab'..."
+    echo "Ejecutando script SQL de configuración desde $SQL_SCRIPT..."
     
-    # Ejecuta el script SQL en MariaDB, usando root sin contraseña
-    sudo mysql -u root < "$SQL_SCRIPT"
+    # El script SQL crea la DB y las tablas
+    sudo mysql -u root < "$SQL_SCRIPT" 
     
     if [ $? -eq 0 ]; then
-        echo "Base de datos 'ctf_lab' creada y poblada con éxito. Las claves SQLi y XSS están listas."
+        echo "Base de datos 'ctf_lab' creada y poblada con éxito."
     else
-        echo "Error al ejecutar el script SQL. Por favor, revisa el archivo '$SQL_SCRIPT'."
+        echo "Error al ejecutar el script SQL."
     fi
 else
-    echo "ADVERTENCIA: No se encontró el script SQL en '$SQL_SCRIPT'. La base de datos no se ha configurado."
+    echo "ADVERTENCIA: No se encontró el script SQL en '$SQL_SCRIPT'. La DB no se ha configurado."
 fi
+
+# 7. NOTIFICACIÓN FINAL
+#####################
 
 echo ""
 echo "--------------------------------------------------------------------------------------"
-echo "🎉 Configuración del Laboratorio CTF completada."
-echo "La máquina virtual es accesible vía HTTP en su IP local."
-echo "Para empezar, escanea los puertos para encontrar la IP."
+echo "🎉 Configuración de Laboratorio CTF completada."
+echo "¡El puerto 80 (HTTP) está abierto y listo para el ataque!"
+echo "Accede desde tu máquina anfitriona usando la IP de tu MV."
 echo "--------------------------------------------------------------------------------------"
