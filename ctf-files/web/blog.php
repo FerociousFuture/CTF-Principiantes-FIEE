@@ -19,36 +19,33 @@
         <hr>
         
         <?php
-        // Configuración de la Base de Datos
+        // CONFIGURACIÓN DE LA BASE DE DATOS (USUARIO CORREGIDO)
         $servername = "localhost";
-        $username = "root";
-        $password = ""; // Sin contraseña
+        $username = "ctf_user"; // ¡USUARIO CORREGIDO!
+        $password = "ctf_pass"; // ¡CLAVE CORREGIDA!
         $dbname = "ctf_lab";
         
         $conn = new mysqli($servername, $username, $password, $dbname);
 
         if ($conn->connect_error) {
-            echo "<div class='message error'>Error de conexión a la base de datos.</div>";
+            echo "<div class='message error'>Error de conexión a la base de datos: " . $conn->connect_error . "</div>";
             exit();
         }
 
         // --- MANEJO DE PUBLICACIÓN DE NUEVOS COMENTARIOS ---
         if ($_SERVER["REQUEST_METHOD"] == "POST") {
-            // No sanitizamos los datos de entrada, haciéndolo vulnerable a XSS
+            // No sanitizamos los datos de entrada
             $new_title = $_POST['post_title'];
             $new_content = $_POST['post_content'];
             $new_author = "Participante CTF";
 
-            // Usamos prepared statements para INSERT, pero el *contenido* no es sanitizado
-            // antes de ser almacenado/mostrado, lo que crea la vulnerabilidad al recuperar.
-            // Aunque la inserción es segura, la visualización es el punto de fallo.
             $stmt = $conn->prepare("INSERT INTO blog_posts (title, content, author) VALUES (?, ?, ?)");
             $stmt->bind_param("sss", $new_title, $new_content, $new_author);
 
             if ($stmt->execute()) {
                 echo "<div class='message success'>Comentario publicado con éxito. ¡Revísalo abajo!</div>";
             } else {
-                echo "<div class='message error'>Error al publicar el comentario.</div>";
+                echo "<div class='message error'>Error al publicar el comentario: " . $conn->error . "</div>";
             }
             $stmt->close();
         }
@@ -79,7 +76,7 @@
             while($row = $result->fetch_assoc()) {
                 // VULNERABILIDAD CLAVE: NO SE SANEAN LAS SALIDAS
                 $title = $row['title'];
-                $content = $row['content']; // ¡El script se inyectará aquí!
+                $content = $row['content']; 
                 $author = $row['author'];
                 
                 echo "<div style='border: 1px solid #ced4da; padding: 15px; margin-top: 15px; text-align: left; background-color: #ffffff;'>";
