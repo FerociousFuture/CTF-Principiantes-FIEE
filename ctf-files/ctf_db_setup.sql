@@ -46,12 +46,12 @@ INSERT INTO users (username, password_hash, role) VALUES (
 -- 6. Insertar posts (incluyendo la pista de la clave XSS)
 INSERT INTO blog_posts (title, content, author) VALUES (
     'Bienvenido al Blog del CTF', 
-    'Este blog ha estado desatendido. Las claves de los errores pasados a veces se dejan en los comentarios. ¡Busca los mensajes de error!', 
+    'Este blog ha estado desatendido.', 
     'SystemAdmin'
 );
 
 INSERT INTO blog_posts (title, content, author) VALUES (
-    'Pista del Administrador', 
-    'El último ataque XSS expuso una clave. No se ha limpiado el comentario malicioso. La clave del XSS es: KEY_2_XSS_F0UND. ¡No borres este mensaje!', 
+    'ADMIN POST', 
+    'El último ataque XSS expuso una clave. No se ha limpiado el comentario malicioso.', 
     'Anonymous'
 );

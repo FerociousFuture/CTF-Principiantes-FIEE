@@ -41,7 +41,7 @@
 <body>
     <div class="container">
         <h1>Galería de Imágenes del Proyecto Fénix</h1>
-        <p>Hemos subido algunas fotos recientes. Recuerda que la imagen debe ser descargada a tu máquina para analizarla.</p>
+        <p>Hemos subido algunas fotos recientes.</p>
         
         <div class="nav">
             <a href="index.php">Inicio</a>
@@ -68,7 +68,7 @@
             <div class="image-card">
                 <img src="./images/Soy_ghost.jpg.jpg" alt="ERROR ERROR ERROR">
                 <p>Whoami</p>
-                <a href="./images/Soy_ghost.jpg.jpg" download>Descargar Original (CLAVE 4)</a> 
+                <a href="./images/Soy_ghost.jpg.jpg" download>Descargar Original</a> 
             </div>
 
         </div>

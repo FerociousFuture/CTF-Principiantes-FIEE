@@ -6,7 +6,7 @@
     <link rel="stylesheet" href="style.css"> </head>
 <body>
     <div class="container">
-        <h1>Bienvenido al Desafío CTF: Operación Fénix</h1>
+        <h1>Bienvenido al Desafío CTF</h1>
         <p>Este es el punto de inicio. Tienes 1 hora para encontrar las 5 claves ocultas. Empieza por el reconocimiento de la máquina.</p>
         
         <div class="nav">
