@@ -1,6 +1,6 @@
 #!/usr/bin/env bash
 # --------------------------------------------------------------------
-# 🧱 CTF Fedora Server Auto Setup Script - Versión Definitiva
+# CTF Fedora Server Auto Setup Script
 # --------------------------------------------------------------------
 # Instala y configura Apache, PHP, MariaDB, firewall y SELinux.
 # Crea la base de datos del laboratorio CTF y despliega los archivos web.
@@ -15,15 +15,14 @@ LOG_FILE="/var/log/ctf_setup.log"
 # Redirigir toda la salida (stdout y stderr) al log y a la consola
 exec > >(tee -a "$LOG_FILE") 2>&1
 
-# 🎨 Colores
-GREEN="\e[32m"; RED="\e[31m"; YELLOW="\e[33m"; CYAN="\e[36m"; NC="\e[0m"
+# Funciones de logging
+info()  { echo "[INFO] $*"; }
+ok()    { echo "[OK] $*"; }
+# Los warnings y errores van a stderr, pero serán capturados por '2>&1'
+warn()  { echo "[WARN] $*" >&2; }
+error() { echo "[ERROR] $*" >&2; exit 1; }
 
-info()  { echo -e "${CYAN}[INFO]${NC} $*"; }
-ok()    { echo -e "${GREEN}[OK]${NC} $*"; }
-warn()  { echo -e "${YELLOW}[WARN]${NC} $*"; }
-error() { echo -e "${RED}[ERROR]${NC} $*"; exit 1; }
-
-# 🧩 Verificación de permisos
+# Verificación de permisos
 if [ "$EUID" -ne 0 ]; then
   error "Este script debe ejecutarse como root o con sudo."
 fi
@@ -37,7 +36,7 @@ cd "$SCRIPT_DIR" || exit 1
 info "Cambiando al directorio del script: $SCRIPT_DIR"
 # --------------------------------------------------------
 
-# 📦 Variables
+# Variables
 CTF_FILES_DIR="${CTF_FILES_DIR:-./ctf-files}"
 SQL_SCRIPT="$CTF_FILES_DIR/ctf_db_setup.sql"
 DB_NAME="${DB_NAME:-ctf_lab}"
@@ -183,6 +182,6 @@ ok "Servidor Apache iniciado correctamente."
 # 8. Confirmación final
 # --------------------------------------------------------
 sleep 1
-ok "✅ Configuración completa del laboratorio CTF."
-echo -e "${GREEN}El servicio HTTP está activo en el puerto ${HTTP_PORT}.${NC}"
-echo -e "Accede desde tu máquina anfitriona usando: ${CYAN}http://<IP_de_tu_VM>${NC}"
+ok "Configuración completa del laboratorio CTF."
+echo "El servicio HTTP está activo en el puerto ${HTTP_PORT}."
+echo "Accede desde tu máquina anfitriona usando: http://<IP_de_tu_VM>"
