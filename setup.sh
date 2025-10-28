@@ -28,6 +28,16 @@ if [ "$EUID" -ne 0 ]; then
   error "Este script debe ejecutarse como root o con sudo."
 fi
 
+# --------------------------------------------------------
+# 0. Determinar la ubicación absoluta del script
+# --------------------------------------------------------
+# Esto asegura que todas las rutas relativas (./ctf-files) funcionen
+# sin importar desde dónde se llame al script.
+SCRIPT_DIR=$( cd -- "$( dirname -- "${BASH_SOURCE[0]}" )" &> /dev/null && pwd )
+cd "$SCRIPT_DIR" || exit 1
+info "Cambiando al directorio del script: $SCRIPT_DIR"
+# --------------------------------------------------------
+
 # 📦 Variables
 CTF_FILES_DIR="${CTF_FILES_DIR:-./ctf-files}"
 SQL_SCRIPT="$CTF_FILES_DIR/ctf_db_setup.sql"
