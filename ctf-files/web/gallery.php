@@ -1,84 +1,67 @@
 <!DOCTYPE html>
 <html lang="es">
 <head>
-    <meta charset="UTF-8">
-    <title>Galería de Imágenes - Pista Oculta</title>
+    <meta charset="UTF-R">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Galería - SecureTech Inc.</title>
     <link rel="stylesheet" href="style.css">
-    <style>
-        .image-grid {
-            display: grid;
-            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
-            gap: 20px;
-            margin-top: 30px;
-        }
-        .image-card {
-            border: 1px solid #ced4da;
-            border-radius: 5px;
-            overflow: hidden;
-            text-align: center;
-            padding: 10px;
-            background-color: #f8f9fa;
-        }
-        .image-card img {
-            width: 100%;
-            height: auto;
-            border-radius: 3px;
-            max-height: 200px;
-            object-fit: cover;
-        }
-        .image-card a {
-            display: block;
-            margin-top: 10px;
-            color: #17a2b8;
-            text-decoration: none;
-            font-weight: bold;
-        }
-        .image-card a:hover {
-            text-decoration: underline;
-        }
-    </style>
-</head>
+    </head>
 <body>
-    <div class="container">
-        <h1>Galería de Imágenes</h1>
-        <p>Hemos subido algunas fotos recientes.</p>
-        
-        <div class="nav">
-            <a href="index.php">Inicio</a>
-            <a href="blog.php">Blog de Noticias</a>
-            <a href="login.php">Acceso de Usuarios</a>
+
+    <header class="main-header">
+        <div class="container header-content">
+            <a href="index.html" class="logo">SecureTech Inc.</a>
+            <nav class="main-nav">
+                <a href="index.html">Inicio</a>
+                <a href="blog.php">Blog</a>
+                <a href="gallery.php" class="active">Galería</a> <a href="login.php">Acceso Clientes</a>
+            </nav>
         </div>
-        
-        <hr>
-        
-        <div class="image-grid">
+    </header>
+
+    <main class="page-content">
+        <div class="container">
             
-            <div class="image-card">
-                <img src="./images/foto1.jpg" alt="Equipo de Desarrollo">
-                <p>Sesión de planificación de la fase 1.</p>
-                <a href="./images/foto1.jpg" download="foto1.jpg">Descargar Original</a> 
+            <div style="text-align: center; margin-bottom: 2.5rem;">
+                <h1>Galería de Eventos</h1>
+                <p class="text-light" style="font-size: 1.1rem;">Un vistazo a nuestro equipo y actividades recientes.</p>
             </div>
 
-            <div class="image-card">
-                <img src="./images/foto2.jpg" alt="Aprende mas sobre las redes de computadoras">
-                <p>Seminario de Redes de Informatica.</p>
-                <a href="./images/foto2.jpg" download="foto2.jpg">Descargar Original</a> 
-            </div>
+            <div class="gallery-grid">
+            
+                <div class="gallery-item">
+                    <img src="./images/foto1.jpg" alt="Equipo de Desarrollo en reunión">
+                    <p>Sesión de planificación de la fase 1.</p>
+                    <a href="./images/foto1.jpg" download="foto1.jpg">Descargar Original</a> 
+                </div>
 
-            <div class="image-card">
-                <img src="./images/Soy_ghost.jpg" alt="ERROR ERROR ERROR">
-                <p>whoami</p>
-                
-                <a href="./images/Soy_ghost.jpg" download="Soy_ghost.jpg">Descargar Original</a> 
-            </div>
+                <div class="gallery-item">
+                    <img src="./images/foto2.jpg" alt="Seminario de Redes">
+                    <p>Seminario de Redes de Informática.</p>
+                    <a href="./images/foto2.jpg" download="foto2.jpg">Descargar Original</a> 
+                </div>
 
-            <div class="image-card">
-                <img src="./images/foto3.jpg" alt="Concurso de botargas UV">
-                <p>Concurso de Botargas</p>
-                
-                <a href="./images/foto3.jpg" download="foto3.jpg">Descargar Original</a> 
-            </div>
+                <div class="gallery-item">
+                    <img src="./images/Soy_ghost.jpg" alt="Foto del equipo">
+                    <p>whoami</p> <a href="./images/Soy_ghost.jpg" download="Soy_ghost.jpg">Descargar Original</a> 
+                </div>
 
+                <div class="gallery-item">
+                    <img src="./images/foto3.jpg" alt="Evento de la mascota de la empresa">
+                    <p>Concurso de Botargas</p>
+                    <a href="./images/foto3.jpg" download="foto3.jpg">Descargar Original</a> 
+                </div>
+
+            </div> </div> </main>
+
+    <footer class="main-footer">
+        <div class="container">
+            <p>&copy; 2025 SecureTech Inc. Todos los derechos reservados.</p>
+            <p style="font-size: 0.9em; color: var(--text-light); margin-top: 5px;">
+                Servido por Apache/2.4.58 (Fedora)
+            </p>
         </div>
+    </footer>
 
-        <p style="margin-top: 30
+</body>
+</html>

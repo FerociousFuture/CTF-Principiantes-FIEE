@@ -1,123 +1,338 @@
 /* ctf-files/web/style.css */
+/* Versión 2.0 - Estilo Corporativo/Empresarial */
 
-body {
-    font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
-    background-color: #e9ecef; /* Un gris claro y suave */
-    color: #343a40;
-    margin: 0;
-    display: flex;
-    justify-content: center;
-    align-items: center;
-    min-height: 100vh;
+:root {
+    --brand-primary: #0056b3; /* Un azul corporativo más profundo */
+    --brand-secondary: #007bff; /* Azul más brillante para acentos */
+    --text-dark: #212529;
+    --text-light: #6c757d;
+    --bg-light: #f8f9fa; /* Fondo de página gris muy claro */
+    --bg-white: #ffffff;
+    --border-color: #dee2e6;
+    --color-success: #155724;
+    --bg-success: #d4edda;
+    --color-danger: #721c24;
+    --bg-danger: #f8d7da;
+    --color-warning: #856404;
+    --bg-warning: #fff3cd;
 }
 
-.container {
-    background-color: #ffffff;
-    padding: 30px;
-    border-radius: 10px;
-    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
-    width: 90%;
-    max-width: 700px;
-    text-align: center;
-    margin: 20px auto;
-}
+/* --- 1. Globales y Tipografía --- */
 
-h1, h2, h3 {
-    color: #007bff; /* Azul primario para encabezados */
-    border-bottom: 2px solid #007bff;
-    padding-bottom: 10px;
-    margin-bottom: 20px;
-}
-
-p {
-    line-height: 1.6;
-}
-
-/* Navegación */
-.nav {
-    margin-bottom: 25px;
-}
-
-.nav a {
-    text-decoration: none;
-    color: #28a745; /* Verde para enlaces principales */
-    font-weight: bold;
-    margin: 0 15px;
-    padding: 8px 15px;
-    border: 1px solid #28a745;
-    border-radius: 5px;
-    transition: background-color 0.3s, color 0.3s;
-}
-
-.nav a:hover {
-    background-color: #28a745;
-    color: white;
-}
-
-/* Formularios y Mensajes */
-input[type="text"], input[type="password"], textarea {
-    width: calc(100% - 22px);
-    padding: 10px;
-    margin: 10px 0;
-    border: 1px solid #ced4da;
-    border-radius: 5px;
+* {
     box-sizing: border-box;
 }
 
-input[type="submit"] {
+html {
+    font-size: 16px;
+}
+
+body {
+    font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif;
+    background-color: var(--bg-light);
+    color: var(--text-dark);
+    margin: 0;
+    display: flex;
+    flex-direction: column;
+    min-height: 100vh;
+    line-height: 1.6;
+}
+
+h1, h2, h3, h4, h5 {
+    margin-top: 0;
+    margin-bottom: 0.75rem;
+    font-weight: 500;
+    color: var(--text-dark);
+}
+
+h1 { font-size: 2.25rem; color: var(--brand-primary); }
+h2 { font-size: 1.75rem; }
+h3 { font-size: 1.5rem; }
+
+p {
+    margin-bottom: 1rem;
+}
+
+a {
+    color: var(--brand-secondary);
+    text-decoration: none;
+    transition: color 0.2s ease-in-out;
+}
+
+a:hover {
+    color: var(--brand-primary);
+    text-decoration: underline;
+}
+
+img {
+    max-width: 100%;
+    height: auto;
+}
+
+/* --- 2. Estructura de Página y Contenedores --- */
+
+/* Uso de HTML esperado:
+   <body>
+     <header class="main-header">...</header>
+     <main class="page-content">
+       <div class="container">
+         </div>
+     </main>
+     <footer class="main-footer">...</footer>
+   </body>
+*/
+
+.container {
+    width: 90%;
+    max-width: 1140px; /* Ancho estándar para sitios corporativos */
+    margin: 0 auto;
+    padding: 0 15px;
+}
+
+.main-header {
     width: 100%;
-    padding: 12px;
-    background-color: #dc3545; /* Rojo para botón de acción */
-    color: white;
+    background-color: var(--bg-white);
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.05);
+    padding: 1rem 0;
+    border-bottom: 1px solid var(--border-color);
+}
+
+.header-content {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+}
+
+.logo {
+    font-size: 1.75rem;
+    font-weight: bold;
+    color: var(--brand-primary);
+    text-decoration: none;
+}
+
+.logo:hover {
+    text-decoration: none;
+    color: var(--text-dark);
+}
+
+.main-nav a {
+    color: var(--text-light);
+    font-weight: 500;
+    margin: 0 1rem;
+    padding: 0.5rem 0;
+    text-decoration: none;
+    border-bottom: 2px solid transparent;
+}
+
+.main-nav a:hover,
+.main-nav a.active {
+    color: var(--brand-primary);
+    border-bottom-color: var(--brand-primary);
+}
+
+.page-content {
+    flex-grow: 1; /* Empuja el footer hacia abajo */
+    padding: 2.5rem 0;
+}
+
+/* El contenedor principal para formularios, etc. */
+.content-box {
+    background-color: var(--bg-white);
+    padding: 2rem 2.5rem;
+    border-radius: 8px;
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.08);
+    max-width: 700px;
+    margin: 0 auto; /* Centra la caja de login/registro */
+}
+
+.main-footer {
+    width: 100%;
+    background-color: #343a40; /* Footer oscuro */
+    color: var(--bg-light);
+    padding: 2rem 0;
+    text-align: center;
+    margin-top: auto; /* Se pega al fondo */
+}
+
+.main-footer p {
+    margin: 0;
+    color: var(--text-light);
+}
+
+/* --- 3. Formularios y Botones --- */
+
+form {
+    width: 100%;
+}
+
+.form-group {
+    margin-bottom: 1.25rem;
+    text-align: left;
+}
+
+.form-group label {
+    display: block;
+    margin-bottom: 0.5rem;
+    font-weight: 500;
+    color: var(--text-light);
+}
+
+input[type="text"],
+input[type="password"],
+input[type="email"],
+textarea {
+    width: 100%;
+    padding: 0.75rem 1rem;
+    border: 1px solid var(--border-color);
+    border-radius: 5px;
+    font-size: 1rem;
+    transition: border-color 0.2s, box-shadow 0.2s;
+}
+
+input[type="text"]:focus,
+input[type="password"]:focus,
+input[type="email"]:focus,
+textarea:focus {
+    border-color: var(--brand-secondary);
+    box-shadow: 0 0 0 3px rgba(0, 123, 255, 0.25);
+    outline: none;
+}
+
+/* Estilo de Botón Genérico */
+.btn {
+    display: inline-block;
+    width: 100%;
+    padding: 0.75rem 1.25rem;
+    font-size: 1rem;
+    font-weight: 500;
+    text-align: center;
+    text-decoration: none;
     border: none;
     border-radius: 5px;
     cursor: pointer;
-    font-weight: bold;
-    transition: background-color 0.3s;
+    transition: background-color 0.2s, transform 0.1s;
+}
+
+.btn:active {
+    transform: scale(0.98);
+}
+
+.btn-primary {
+    background-color: var(--brand-primary);
+    color: var(--bg-white);
+}
+
+.btn-primary:hover {
+    background-color: #004a99; /* Un poco más oscuro */
+    color: var(--bg-white);
+    text-decoration: none;
+}
+
+/* Para compatibilidad con <input type="submit"> */
+input[type="submit"] {
+    display: inline-block;
+    width: 100%;
+    padding: 0.75rem 1.25rem;
+    font-size: 1rem;
+    font-weight: 500;
+    text-align: center;
+    text-decoration: none;
+    border: none;
+    border-radius: 5px;
+    cursor: pointer;
+    transition: background-color 0.2s, transform 0.1s;
+    background-color: var(--brand-primary);
+    color: var(--bg-white);
 }
 
 input[type="submit"]:hover {
-    background-color: #c82333;
+    background-color: #004a99;
 }
 
+
+/* --- 4. Mensajes y Alertas --- */
+
 .message {
-    margin: 15px 0;
-    padding: 15px;
+    margin: 1rem 0;
+    padding: 1rem 1.25rem;
     border-radius: 5px;
+    border: 1px solid transparent;
     text-align: center;
-    font-weight: bold;
+    font-weight: 500;
 }
 
 .error {
-    background-color: #f8d7da;
-    color: #721c24;
-    border: 1px solid #f5c6cb;
+    background-color: var(--bg-danger);
+    color: var(--color-danger);
+    border-color: #f5c6cb;
 }
 
 .success {
-    background-color: #d4edda;
-    color: #155724;
-    border: 1px solid #c3e6cb;
+    background-color: var(--bg-success);
+    color: var(--color-success);
+    border-color: #c3e6cb;
 }
 
-/* Clave Oculta */
+/* --- 5. Componentes Específicos (Blog, Galería, CTF) --- */
+
+/* Para una página de blog */
+.blog-post {
+    background-color: var(--bg-white);
+    padding: 2rem;
+    border-radius: 8px;
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.08);
+    margin-bottom: 2rem;
+}
+
+.blog-post .post-meta {
+    font-size: 0.9rem;
+    color: var(--text-light);
+    margin-bottom: 1rem;
+}
+
+/* Para una página de galería */
+.gallery-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+    gap: 1.5rem;
+}
+
+.gallery-item {
+    border-radius: 8px;
+    overflow: hidden;
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.08);
+    background-color: var(--bg-white);
+}
+
+.gallery-item img {
+    display: block;
+    width: 100%;
+}
+
+.gallery-item p {
+    padding: 1rem;
+    text-align: center;
+    margin: 0;
+}
+
+/* Clave Oculta (Estilo Advertencia) */
 .clave-box {
-    margin-top: 20px;
-    background-color: #fff3cd; /* Amarillo suave para destacar */
-    color: #856404;
-    padding: 20px;
+    margin-top: 1.5rem;
+    background-color: var(--bg-warning);
+    color: var(--color-warning);
+    padding: 1.5rem;
     border-radius: 8px;
     border: 1px solid #ffeeba;
 }
 
 .clave-box h3 {
-    color: #856404;
+    color: var(--color-warning);
     border: none;
+    margin-bottom: 0.5rem;
 }
 
 /* Para el Scrapping */
 .hidden-link {
-    /* Oculta un enlace de forma visual, pero es escaneable por herramientas */
     position: absolute;
-    left: -9999px; 
+    left: -9999px;
 }

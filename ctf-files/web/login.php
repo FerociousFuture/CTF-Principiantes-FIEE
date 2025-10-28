@@ -1,77 +1,117 @@
+<?php
+// ------------------------------------------------------------------
+// LÓGICA DE LOGIN (VULNERABLE A SQL INJECTION)
+// ------------------------------------------------------------------
+
+// CONFIGURACIÓN DE LA BASE DE DATOS
+$servername = "localhost";
+$username = "ctf_user"; 
+$password = "ctf_pass"; 
+$dbname = "ctf_lab";
+$message = ""; // Variable para almacenar mensajes de error/éxito
+
+// Crear conexión
+$conn = new mysqli($servername, $username, $password, $dbname);
+
+// Verificar conexión
+if ($conn->connect_error) {
+    // Usamos la clase .error del CSS global
+    $message = "<div class='message error'>Error de conexión a la base de datos: " . $conn->connect_error . "</div>";
+}
+
+// Procesar el formulario cuando se envía
+if ($_SERVER["REQUEST_METHOD"] == "POST" && !$conn->connect_error) {
+    // Recoger datos del formulario (¡SIN SANITIZAR!)
+    $user = $_POST['username'];
+    $pass = $_POST['password'];
+
+    // CONSTRUCCIÓN DE LA CONSULTA SQL VULNERABLE
+    // Esta consulta es vulnerable a inyección SQL.
+    // Un atacante puede usar algo como: admin' OR '1'='1
+    $sql = "SELECT username, secret_key, role FROM users WHERE username = '$user' AND password_hash = MD5('$pass')";
+    
+    $result = $conn->query($sql);
+
+    if ($result && $result->num_rows > 0) {
+        // Usuario encontrado
+        $row = $result->fetch_assoc();
+        $role = $row['role'];
+        $secret_key = $row['secret_key'];
+        
+        // Comprobar si es administrador y tiene clave
+        if ($role === 'administrator' && !empty($secret_key)) {
+            // CLAVE 3 ENCONTRADA
+            $message = "<div class='message success'><strong>ACCESO ADMINISTRADOR CON ÉXITO.</strong><br>Bienvenido, $user.<br>Tu clave secreta (KEY_3) es: <h3>$secret_key</h3><p>Continúa la búsqueda.</p></div>";
+        } else {
+            // Usuario normal
+            $message = "<div class='message success'><strong>ACCESO CON ÉXITO.</strong><br>Bienvenido, $user. Acceso de usuario estándar. No hay clave aquí para ti.</div>";
+        }
+    } else {
+        // Error de login
+        $message = "<div class='message error'>Usuario o contraseña incorrectos.</div>";
+    }
+}
+
+// Cerrar la conexión
+if ($conn && !$conn->connect_error) {
+    $conn->close();
+}
+?>
+
 <!DOCTYPE html>
 <html lang="es">
 <head>
     <meta charset="UTF-8">
-    <title>Acceso de Usuarios</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Acceso Clientes - SecureTech Inc.</title>
     <link rel="stylesheet" href="style.css">
-    <style>
-        /* Ajuste específico para centrar el login en el container */
-        .login-box { 
-            background-color: white; 
-            padding: 30px; 
-            border-radius: 8px; 
-            box-shadow: 0 0 15px rgba(0, 0, 0, 0.2); 
-            width: 300px;
-            margin: auto;
-        }
-    </style>
-</head>
+    </head>
 <body>
-    <?php
-    // CONFIGURACIÓN DE LA BASE DE DATOS (¡CORREGIDO!)
-    $servername = "localhost";
-    $username = "ctf_user"; // ¡USUARIO CORREGIDO!
-    $password = "ctf_pass"; // ¡CLAVE CORREGIDA!
-    $dbname = "ctf_lab";
-    $message = "";
 
-    $conn = new mysqli($servername, $username, $password, $dbname);
-
-    if ($conn->connect_error) {
-        $message = "<div class='message error'>Error de conexión a la base de datos: " . $conn->connect_error . "</div>";
-    }
-
-    if ($_SERVER["REQUEST_METHOD"] == "POST") {
-        // Consulta SQL VULNERABLE
-        $user = $_POST['username'];
-        $pass = $_POST['password'];
-
-        $sql = "SELECT username, secret_key, role FROM users WHERE username = '$user' AND password_hash = MD5('$pass')";
-        
-        $result = $conn->query($sql);
-
-        if ($result && $result->num_rows > 0) {
-            $row = $result->fetch_assoc();
-            $role = $row['role'];
-            $secret_key = $row['secret_key'];
-            
-            if ($role === 'administrator' && !empty($secret_key)) {
-                $message = "<div class='message success'>ACCESO ADMINISTRADOR CON ÉXITO.<br>Bienvenido, $user.<br>Tu clave secreta (KEY_3) es: <h3>$secret_key</h3><p>Continúa la búsqueda.</p></div>";
-            } else {
-                $message = "<div class='message success'>ACCESO DE USUARIO CON ÉXITO.<br>Bienvenido, $user. Acceso limitado, no hay clave aquí para ti.</div>";
-            }
-        } else {
-            $message = "<div class='message error'>Usuario o contraseña incorrectos.</div>";
-        }
-    }
-
-    $conn->close();
-    ?>
-
-    <div class="container">
-        <div class="login-box">
-            <h2>Acceso al Panel de Control</h2>
-            <?php echo $message; ?>
-            <form method="post" action="login.php">
-                <label for="username">Usuario:</label>
-                <input type="text" id="username" name="username" placeholder="Ingresa tu usuario" required>
-                
-                <label for="password">Contraseña:</label>
-                <input type="password" id="password" name="password" placeholder="Ingresa tu contraseña" required>
-                
-                <input type="submit" value="Iniciar Sesión">
-            </form>
+    <header class="main-header">
+        <div class="container header-content">
+            <a href="index.html" class="logo">SecureTech Inc.</a>
+            <nav class="main-nav">
+                <a href="index.html">Inicio</a>
+                <a href="blog.php">Blog</a>
+                <a href="gallery.php">Galería</a>
+                <a href="login.php" class="active">Acceso Clientes</a> </nav>
         </div>
-    </div>
+    </header>
+
+    <main class="page-content">
+        <div class="container">
+            
+            <div class="content-box">
+                <h2 style="text-align: center;">Portal de Acceso a Clientes</h2>
+                
+                <?php echo $message; ?>
+
+                <form method="post" action="login.php">
+                    <div class="form-group">
+                        <label for="username">Nombre de Usuario:</label>
+                        <input type="text" id="username" name="username" placeholder="Ingrese su usuario" required>
+                    </div>
+                    
+                    <div class="form-group">
+                        <label for="password">Contraseña:</label>
+                        <input type="password" id="password" name="password" placeholder="Ingrese su contraseña" required>
+                    </div>
+                    
+                    <input type="submit" value="Iniciar Sesión">
+                </form>
+            </div>
+
+        </div> </main>
+
+    <footer class="main-footer">
+        <div class="container">
+            <p>&copy; 2025 SecureTech Inc. Todos los derechos reservados.</p>
+            <p style="font-size: 0.9em; color: var(--text-light); margin-top: 5px;">
+                Servido por Apache/2.4.58 (Fedora)
+            </p>
+        </div>
+    </footer>
+
 </body>
 </html>
