@@ -11,8 +11,8 @@ Desarrollar habilidades de aprendizaje vistas en la materia de ciberseguridad.
 
 ## Objetivos Especificos
 
-* Comprender el funcionamiento del direccionamiento, clases, máscaras, puertas de enlace de una IP.
-* Entender el funcionamiento del protocolo HTTP, sus vulnerabilidades y sus métodos de inspección.
+* Comprender el funcionamiento del direccionamiento, clases, máscaras y puertas de enlace del protocolo de internet (IP).
+* Analizar de manera practica los conceptos de vulnervildiades y amenazas en paginas web utilizando el protocolo HTTP.
 * Aprender técnicas de análisis forense y de reconocimiento dentro de un espacio controlado y seguro.
 
 ## Temática y Flujo del Laboratorio
