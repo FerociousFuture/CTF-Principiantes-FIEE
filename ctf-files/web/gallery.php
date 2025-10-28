@@ -40,7 +40,7 @@
 </head>
 <body>
     <div class="container">
-        <h1>Galería de Imágenes del Proyecto Fénix</h1>
+        <h1>Galería de Imágenes</h1>
         <p>Hemos subido algunas fotos recientes.</p>
         
         <div class="nav">
