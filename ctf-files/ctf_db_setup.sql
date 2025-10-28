@@ -6,7 +6,7 @@ CREATE DATABASE IF NOT EXISTS ctf_lab;
 -- Usar la nueva base de datos
 USE ctf_lab;
 
--- 2. Crear la tabla de usuarios para el login vulnerable a SQLi
+-- 2. Crear las tablas (si no existen)
 CREATE TABLE IF NOT EXISTS users (
     id INT AUTO_INCREMENT PRIMARY KEY,
     username VARCHAR(50) NOT NULL UNIQUE,
@@ -15,7 +15,19 @@ CREATE TABLE IF NOT EXISTS users (
     secret_key VARCHAR(100) -- Aquí se oculta la clave SQLi
 );
 
--- 3. Insertar el usuario administrador (adminpassword = 1234, hash MD5: 81dc9bdb52d04dc20036dbd8313ed055)
+CREATE TABLE IF NOT EXISTS blog_posts (
+    id INT AUTO_INCREMENT PRIMARY KEY,
+    title VARCHAR(100) NOT NULL,
+    content TEXT NOT NULL,
+    author VARCHAR(50) NOT NULL
+);
+
+-- 3. ¡CORRECCIÓN! Limpiar datos existentes para reejecución segura
+-- Esto evita el error "Duplicate entry" si el script se corre de nuevo.
+DELETE FROM users;
+DELETE FROM blog_posts;
+
+-- 4. Insertar el usuario administrador (adminpassword = 1234, hash MD5: 81dc9bdb52d04dc20036dbd8313ed055)
 -- Este usuario es el objetivo de la inyección SQL para obtener la clave.
 INSERT INTO users (username, password_hash, role, secret_key) VALUES (
     'admin', 
@@ -24,19 +36,11 @@ INSERT INTO users (username, password_hash, role, secret_key) VALUES (
     'KEY_3_SQLi_W0N' -- ¡Clave 3 del CTF!
 );
 
--- 4. Insertar un usuario normal
+-- 5. Insertar un usuario normal
 INSERT INTO users (username, password_hash, role) VALUES (
     'guest', 
     '5baa61e4c9b93f3f0682250b6cf8331b7ee68fd8', -- Clave: 'password' (SHA1)
     'user'
-);
-
--- 5. Crear la tabla de posts para el Blog vulnerable a XSS
-CREATE TABLE IF NOT EXISTS blog_posts (
-    id INT AUTO_INCREMENT PRIMARY KEY,
-    title VARCHAR(100) NOT NULL,
-    content TEXT NOT NULL,
-    author VARCHAR(50) NOT NULL
 );
 
 -- 6. Insertar posts (incluyendo la pista de la clave XSS)
