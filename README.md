@@ -1,5 +1,5 @@
 # CTF: Laboratorio de Ciberseguridad
-## by FerociousFuture
+## By FerociousFuture
 
 Este repositorio contiene la configuración completa para un laboratorio de Captura la Bandera (CTF) desplegado en una Máquina Virtual (MV) de Fedora Server. El objetivo es ofrecer un entorno controlado para el desarrollo de habilidades esenciales en ciberseguridad ofensiva.
 
