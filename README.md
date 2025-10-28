@@ -12,8 +12,10 @@ Desarrollar habilidades de aprendizaje vistas en la materia de ciberseguridad.
 ## Objetivos Especificos
 
 * Comprender el funcionamiento del direccionamiento, clases, máscaras y puertas de enlace del protocolo de internet (IP).
-* Analizar de manera practica los conceptos de vulnervildiades y amenazas en paginas web utilizando el protocolo HTTP.
+* Fortalecer la capacidad para identificar, explotar y mitigaar vulneravilidades comunes en sistemas y aplicaciones(SQLI, XSS, etc)
 * Aprender técnicas de análisis forense y de reconocimiento dentro de un espacio controlado y seguro.
+* Dominar el uso de herramientas y metodologías de hacking ético (Como escaneres, sniffers, frameworks de explotación)
+
 
 ## Temática y Flujo del Laboratorio
 
