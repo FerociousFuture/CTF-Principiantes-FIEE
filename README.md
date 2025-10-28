@@ -9,8 +9,6 @@ Este repositorio contiene la configuración completa para un laboratorio de Capt
 
 Desarrollar habilidades de aprendizaje vistas en la materia de ciberseguridad.
 
----
-
 ## Objetivos Especificos
 
 * Comprender el funcionamiento del direccionamiento, clases, máscaras, puertas de enlace de una IP.
