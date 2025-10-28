@@ -5,7 +5,7 @@ Este repositorio contiene la configuración completa para un laboratorio de Capt
 
 ---
 
-## Objetivos principales
+## Objetivos Principales
 
 El objetivo principal de este laboratorio es la creación de un espacio de pruebas seguro e aislado para desarrollar las habilidades de cyberseguridad tanto de ataque como de defenza.
 
