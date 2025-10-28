@@ -5,11 +5,17 @@ Este repositorio contiene la configuración completa para un laboratorio de Capt
 
 ---
 
-## Objetivos Principales
+## Objetivo General
 
-El objetivo principal de este laboratorio es la creación de un espacio de pruebas seguro e aislado para desarrollar las habilidades de cyberseguridad tanto de ataque como de defenza.
+Desarrollar habilidades de aprendizaje vistas en la materia de ciberseguridad.
 
 ---
+
+## Objetivos Especificos
+
+* Comprender el funcionamiento del direccionamiento, clases, máscaras, puertas de enlace de una IP.
+* Entender el funcionamiento del protocolo HTTP, sus vulnerabilidades y sus métodos de inspección.
+* Aprender técnicas de análisis forense y de reconocimiento dentro de un espacio controlado y seguro.
 
 ## Temática y Flujo del Laboratorio
 
