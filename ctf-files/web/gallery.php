@@ -56,24 +56,22 @@
             <div class="image-card">
                 <img src="./images/foto_1.jpg" alt="Equipo de Desarrollo">
                 <p>Sesión de planificación de la fase 1.</p>
-                <a href="./images/foto_1.jpg" download>Descargar Original</a> 
+                <a href="./images/foto_1.jpg" download="foto_1.jpg">Descargar Original</a> 
             </div>
 
             <div class="image-card">
                 <img src="./images/foto_2.jpg" alt="Infraestructura de Servidores">
                 <p>Nuevos racks de servidores instalados.</p>
-                <a href="./images/foto_2.jpg" download>Descargar Original</a> 
+                <a href="./images/foto_2.jpg" download="foto_2.jpg">Descargar Original</a> 
             </div>
 
             <div class="image-card">
-                <img src="./images/Soy_ghost.jpg.jpg" alt="ERROR ERROR ERROR">
-                <p>Whoami</p>
-                <a href="./images/Soy_ghost.jpg.jpg" download>Descargar Original</a> 
+                <img src="./images/Soy_ghost.jpg" alt="Diagrama de Red Confidencial">
+                <p>Diagrama de arquitectura del nuevo sistema. ¡Confidencial!</p>
+                
+                <a href="./images/Soy_ghost.jpg" download="Soy_ghost.jpg">Descargar Original (CLAVE 4)</a> 
             </div>
 
         </div>
 
-        <p style="margin-top: 30px;">Si no encuentras nada, quizás debas probar diferentes herramientas de esteganografía.</p>
-    </div>
-</body>
-</html>
+        <p style="margin-top: 30
