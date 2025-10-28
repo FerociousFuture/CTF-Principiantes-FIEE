@@ -67,7 +67,7 @@ if [ -f /etc/systemd/system/httpd.service.d/php-fpm.conf ]; then
   ok "Archivo drop-in php-fpm.conf eliminado."
 fi
 
-# Eliminar múltiples líneas Listen para asegurar que solo escuche en el puerto 80
+# Asegurar que solo escuche en el puerto 80
 sed -i '/^Listen /d' /etc/httpd/conf/httpd.conf
 echo "Listen ${HTTP_PORT}" >> /etc/httpd/conf/httpd.conf
 
@@ -123,10 +123,10 @@ HTML_DIR="/var/www/html"
 # Limpiar el destino
 rm -rf "$HTML_DIR"/*
 
-# CORRECCIÓN DE COPIA: Usar 'cp -rT' para copiar el *contenido* de forma segura
+# CORRECCIÓN DE COPIA: Usar 'cp -r .../.' para copiar el *contenido* de forma segura
 if [ -d "$WEB_DIR" ]; then
-  # 'cp -rT SOURCE DEST' copia el contenido de SOURCE a DEST sin crear un subdirectorio
-  cp -rT "$WEB_DIR" "$HTML_DIR" || error "Error copiando archivos web."
+  # Esta sintaxis (con /.) copia el contenido de web/ en html/
+  cp -r "$WEB_DIR/." "$HTML_DIR" || error "Error copiando archivos web."
   ok "Archivos web desplegados."
 else
   warn "No se encontró '$WEB_DIR'."
