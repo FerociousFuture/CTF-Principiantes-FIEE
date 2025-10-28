@@ -46,7 +46,7 @@ Se recomienda que el participante tenga conocimientos fundamentales en las sigui
 2.  **Configuración de Red:** Asegurar que la MV utilice el modo **Adaptador Solo Anfitrión** (Host-Only Adapter).
 3.  **Clonar el Repo:** Dentro de la MV de Fedora Server, clonar este repositorio.
     ```bash
-    git clone [URL_DEL_REPO]
+    git clone https://github.com/FerociousFuture/CTF-Principiantes-FIEE.git
     ```
 4.  **Ejecución:** Otorgar permisos y ejecutar el script de configuración, el cual instalará Apache, MariaDB y desplegará todos los archivos del CTF.
     ```bash
