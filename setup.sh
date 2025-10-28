@@ -120,7 +120,7 @@ info "Desplegando archivos web del CTF..."
 
 if [ -d "$CTF_FILES_DIR/web" ]; then
   rm -rf /var/www/html/*
-  cp -r "$CTF_FILES_DIR/web"/* /var/www/html/ || error "Error copiando archivos web."
+  cp -r "$CTF_FILES_DIR/web/." /var/www/html/ || error "Error copiando archivos web."
   [ -d "$CTF_FILES_DIR/images" ] && cp -r "$CTF_FILES_DIR/images" /var/www/html/
 
   chown -R ${APACHE_USER}:${APACHE_GROUP} /var/www/html
