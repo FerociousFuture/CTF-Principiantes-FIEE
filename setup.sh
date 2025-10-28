@@ -7,10 +7,12 @@
 # Resuelve conflictos con la página de bienvenida de Fedora y permisos de SELinux.
 # --------------------------------------------------------------------
 
+# Configuración estricta de errores
 set -euo pipefail
 IFS=$'\n\t'
 
 LOG_FILE="/var/log/ctf_setup.log"
+# Redirigir toda la salida (stdout y stderr) al log y a la consola
 exec > >(tee -a "$LOG_FILE") 2>&1
 
 # 🎨 Colores
@@ -37,6 +39,7 @@ APACHE_GROUP="apache"
 HTTP_PORT=80
 
 info "Iniciando configuración del laboratorio CTF..."
+info "Logs completos se guardarán en: $LOG_FILE"
 sleep 1
 
 # --------------------------------------------------------
@@ -52,7 +55,7 @@ ok "Paquetes instalados correctamente."
 # --------------------------------------------------------
 info "Eliminando configuraciones previas de Apache problemáticas..."
 
-# NUEVO: Deshabilitar la página de bienvenida de Fedora para evitar conflicto
+# CORRECCIÓN: Deshabilitar la página de bienvenida de Fedora
 if [ -f /etc/httpd/conf.d/welcome.conf ]; then
   mv /etc/httpd/conf.d/welcome.conf /etc/httpd/conf.d/welcome.conf.bak
   ok "Página de bienvenida de Fedora deshabilitada."
@@ -97,13 +100,14 @@ fi
 # 5. Configuración de MariaDB
 # --------------------------------------------------------
 info "Configurando MariaDB (seguridad básica y creación de DB)..."
-mysql -u root <<SQL || error "Fallo en configuración inicial de MariaDB."
-DELETE FROM mysql.user WHERE User='' OR (User='root' AND Host NOT IN ('localhost', '12-7.0.0.1', '::1'));
+# Usamos 'EOF' con comillas para evitar la expansión de variables por el shell
+mysql -u root <<'SQL' || error "Fallo en configuración inicial de MariaDB."
+DELETE FROM mysql.user WHERE User='' OR (User='root' AND Host NOT IN ('localhost', '127.0.0.1', '::1'));
 DROP DATABASE IF EXISTS test;
 FLUSH PRIVILEGES;
-CREATE DATABASE IF NOT EXISTS \`$DB_NAME\` CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci;
-CREATE USER IF NOT EXISTS '$DB_USER'@'localhost' IDENTIFIED BY '$DB_PASS';
-GRANT ALL PRIVILEGES ON \`$DB_NAME\`.* TO '$DB_USER'@'localhost';
+CREATE DATABASE IF NOT EXISTS `ctf_lab` CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci;
+CREATE USER IF NOT EXISTS 'ctf_user'@'localhost' IDENTIFIED BY 'ctf_pass';
+GRANT ALL PRIVILEGES ON `ctf_lab`.* TO 'ctf_user'@'localhost';
 FLUSH PRIVILEGES;
 SQL
 ok "Base de datos '$DB_NAME' y usuario '$DB_USER' creados."
@@ -112,24 +116,40 @@ ok "Base de datos '$DB_NAME' y usuario '$DB_USER' creados."
 # 6. Despliegue de archivos web y base de datos
 # --------------------------------------------------------
 info "Desplegando archivos web del CTF..."
-if [ -d "$CTF_FILES_DIR/web" ]; then
-  rm -rf /var/www/html/*
-  cp -r "$CTF_FILES_DIR/web/." /var/www/html/ || error "Error copiando archivos web."
-  [ -d "$CTF_FILES_DIR/images" ] && cp -r "$CTF_FILES_DIR/images" /var/www/html/
+WEB_DIR="$CTF_FILES_DIR/web"
+IMG_DIR="$CTF_FILES_DIR/images"
+HTML_DIR="/var/www/html"
 
-  chown -R ${APACHE_USER}:${APACHE_GROUP} /var/www/html
-  chmod -R 755 /var/www/html
-  
-  # NUEVO Y CRÍTICO: Restaurar contexto de SELinux para arreglar error 403 Forbidden
-  restorecon -Rv /var/www/html >/dev/null 2>&1 || true
-  ok "Archivos web desplegados y permisos de SELinux aplicados."
+# Limpiar el destino
+rm -rf "$HTML_DIR"/*
+
+# CORRECCIÓN DE COPIA: Usar 'cp -rT' para copiar el *contenido* de forma segura
+if [ -d "$WEB_DIR" ]; then
+  # 'cp -rT SOURCE DEST' copia el contenido de SOURCE a DEST sin crear un subdirectorio
+  cp -rT "$WEB_DIR" "$HTML_DIR" || error "Error copiando archivos web."
+  ok "Archivos web desplegados."
 else
-  warn "No se encontró '$CTF_FILES_DIR/web'."
+  warn "No se encontró '$WEB_DIR'."
 fi
 
+if [ -d "$IMG_DIR" ]; then
+  cp -r "$IMG_DIR" "$HTML_DIR/images" || error "Error copiando archivos de imágenes."
+  ok "Archivos de imágenes desplegados."
+else
+  warn "No se encontró '$IMG_DIR'."
+fi
+
+# Asignar permisos y contexto de SELinux
+chown -R ${APACHE_USER}:${APACHE_GROUP} "$HTML_DIR"
+chmod -R 755 "$HTML_DIR"
+# CORRECCIÓN: Arreglar error 403 Forbidden
+restorecon -Rv "$HTML_DIR" >/dev/null 2>&1 || true
+ok "Permisos de archivos y contexto de SELinux aplicados."
+
+# Ejecutar script SQL (ahora que sabemos que los archivos existen)
 if [ -f "$SQL_SCRIPT" ]; then
   info "Ejecutando script SQL: $SQL_SCRIPT"
-  mysql -u root "$DB_NAME" < "$SQL_SCRIPT" && ok "Script SQL ejecutado correctamente." || warn "Error ejecutando script SQL."
+  mysql -u root "$DB_NAME" < "$SQL_SCRIPT" && ok "Script SQL ejecutado correctamente." || warn "Error ejecutando script SQL (¿ya se ejecutó?)."
 else
   warn "No se encontró '$SQL_SCRIPT'."
 fi
@@ -151,4 +171,3 @@ sleep 1
 ok "✅ Configuración completa del laboratorio CTF."
 echo -e "${GREEN}El servicio HTTP está activo en el puerto ${HTTP_PORT}.${NC}"
 echo -e "Accede desde tu máquina anfitriona usando: ${CYAN}http://<IP_de_tu_VM>${NC}"
-echo -e "Log del proceso: ${YELLOW}${LOG_FILE}${NC}"
