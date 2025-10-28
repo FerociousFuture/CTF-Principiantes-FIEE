@@ -31,8 +31,7 @@ fi
 # --------------------------------------------------------
 # 0. Determinar la ubicación absoluta del script
 # --------------------------------------------------------
-# Esto asegura que todas las rutas relativas (./ctf-files) funcionen
-# sin importar desde dónde se llame al script.
+# ESTO ARREGLA EL ERROR DE COPIA:
 SCRIPT_DIR=$( cd -- "$( dirname -- "${BASH_SOURCE[0]}" )" &> /dev/null && pwd )
 cd "$SCRIPT_DIR" || exit 1
 info "Cambiando al directorio del script: $SCRIPT_DIR"
@@ -133,30 +132,36 @@ HTML_DIR="/var/www/html"
 # Limpiar el destino
 rm -rf "$HTML_DIR"/*
 
-# CORRECCIÓN DE COPIA: Usar 'cp -r .../.' para copiar el *contenido* de forma segura
+# 6a. Copiar archivos web (Sintaxis robusta)
 if [ -d "$WEB_DIR" ]; then
-  # Esta sintaxis (con /.) copia el contenido de web/ en html/
-  cp -r "$WEB_DIR/." "$HTML_DIR" || error "Error copiando archivos web."
-  ok "Archivos web desplegados."
+  cp -r "$WEB_DIR/." "$HTML_DIR" || error "Error copiando archivos web (desde $WEB_DIR)."
 else
-  warn "No se encontró '$WEB_DIR'."
+  error "No se encontró el directorio fuente: '$WEB_DIR'."
 fi
 
+# 6b. Copiar imágenes (Sintaxis robusta)
 if [ -d "$IMG_DIR" ]; then
-  cp -r "$IMG_DIR" "$HTML_DIR/images" || error "Error copiando archivos de imágenes."
-  ok "Archivos de imágenes desplegados."
+  # Copia el *contenido* de ctf-files/images/ a /var/www/html/images/
+  mkdir -p "$HTML_DIR/images"
+  cp -r "$IMG_DIR/." "$HTML_DIR/images" || error "Error copiando archivos de imágenes."
 else
   warn "No se encontró '$IMG_DIR'."
 fi
 
-# Asignar permisos y contexto de SELinux
+# 6c. Verificación de la copia
+info "Verificando la copia de archivos..."
+if [ ! -f "$HTML_DIR/index.php" ]; then
+    error "¡VERIFICACIÓN FALLIDA! El archivo 'index.php' no existe en $HTML_DIR. La copia falló."
+fi
+ok "Archivos web desplegados y validados en $HTML_DIR."
+
+# 6d. Asignar permisos y contexto de SELinux
 chown -R ${APACHE_USER}:${APACHE_GROUP} "$HTML_DIR"
 chmod -R 755 "$HTML_DIR"
-# CORRECCIÓN: Arreglar error 403 Forbidden
 restorecon -Rv "$HTML_DIR" >/dev/null 2>&1 || true
 ok "Permisos de archivos y contexto de SELinux aplicados."
 
-# Ejecutar script SQL (ahora que sabemos que los archivos existen)
+# 6e. Ejecutar script SQL
 if [ -f "$SQL_SCRIPT" ]; then
   info "Ejecutando script SQL: $SQL_SCRIPT"
   mysql -u root "$DB_NAME" < "$SQL_SCRIPT" && ok "Script SQL ejecutado correctamente." || warn "Error ejecutando script SQL (¿ya se ejecutó?)."
