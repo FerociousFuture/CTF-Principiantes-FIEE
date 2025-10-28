@@ -74,7 +74,7 @@
 
             <div class="image-card">
                 <img src="./images/foto3.jpg" alt="Concurso de botargas UV">
-                <p>Dato</p>
+                <p>Concurso de Botargas</p>
                 
                 <a href="./images/foto3.jpg" download="foto3.jpg">Descargar Original</a> 
             </div>
