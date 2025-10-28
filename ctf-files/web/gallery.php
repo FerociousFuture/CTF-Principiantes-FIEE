@@ -72,6 +72,13 @@
                 <a href="./images/Soy_ghost.jpg" download="Soy_ghost.jpg">Descargar Original</a> 
             </div>
 
+            <div class="image-card">
+                <img src="./images/foto3.jpg" alt="Concurso de botargas UV">
+                <p>Dato</p>
+                
+                <a href="./images/foto3.jpg" download="foto3.jpg">Descargar Original</a> 
+            </div>
+
         </div>
 
         <p style="margin-top: 30
