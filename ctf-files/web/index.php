@@ -19,13 +19,11 @@
         <br>
         <p>Tu primer objetivo es obtener información. ¿Qué archivos tiene esta web?</p>
         
-        <a href="key_1_intro.html" class="hidden-link">clave-secreta</a>
+        <a href="key_1_intro.html" class="hidden-link">clave-secreta-1</a>
+        <a href="passwords.php" class="hidden-link">enlace-secreto-passwords</a>
+        <a href="admin_panel.php" class="hidden-link">enlace-secreto-admin</a>
 
         <div class="footer">
-            <p style="display:none;">
-                La ruta de acceso a la primera clave es: /key_1_intro.html
-                </p>
-            
             <p style="margin-top: 20px; font-size: 0.8em; color: #aaa;">Servido por Apache/2.4.58 (Fedora)</p>
         </div>
     </div>
