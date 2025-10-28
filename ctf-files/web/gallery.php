@@ -60,14 +60,14 @@
             </div>
 
             <div class="image-card">
-                <img src="./images/foto2.jpg" alt="Infraestructura de Servidores">
-                <p>Nuevos racks de servidores instalados.</p>
+                <img src="./images/foto2.jpg" alt="Aprende mas sobre las redes de computadoras">
+                <p>Seminario de Redes de Informatica.</p>
                 <a href="./images/foto2.jpg" download="foto2.jpg">Descargar Original</a> 
             </div>
 
             <div class="image-card">
-                <img src="./images/Soy_ghost.jpg" alt="Diagrama de Red Confidencial">
-                <p>Diagrama de arquitectura del nuevo sistema. ¡Confidencial!</p>
+                <img src="./images/Soy_ghost.jpg" alt="ERROR ERROR ERROR">
+                <p>whoami</p>
                 
                 <a href="./images/Soy_ghost.jpg" download="Soy_ghost.jpg">Descargar Original</a> 
             </div>
