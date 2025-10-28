@@ -5,6 +5,12 @@ Este repositorio contiene la configuración completa para un laboratorio de Capt
 
 ---
 
+## Objetivos principales
+
+El objetivo principal de este laboratorio es la creación de un espacio de pruebas seguro e aislado para desarrollar las habilidades de cyberseguridad tanto de ataque como de defenza.
+
+---
+
 ## Temática y Flujo del Laboratorio
 
 El desafío consiste en encontrar **cinco (5) claves ocultas** en un período de 60 minutos, utilizando únicamente el protocolo HTTP y el reconocimiento de la MV.
