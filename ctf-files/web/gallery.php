@@ -54,22 +54,22 @@
         <div class="image-grid">
             
             <div class="image-card">
-                <img src="./images/foto_1.jpg" alt="Equipo de Desarrollo">
+                <img src="./images/foto1.jpg" alt="Equipo de Desarrollo">
                 <p>Sesión de planificación de la fase 1.</p>
-                <a href="./images/foto_1.jpg" download="foto_1.jpg">Descargar Original</a> 
+                <a href="./images/foto1.jpg" download="foto1.jpg">Descargar Original</a> 
             </div>
 
             <div class="image-card">
-                <img src="./images/foto_2.jpg" alt="Infraestructura de Servidores">
+                <img src="./images/foto2.jpg" alt="Infraestructura de Servidores">
                 <p>Nuevos racks de servidores instalados.</p>
-                <a href="./images/foto_2.jpg" download="foto_2.jpg">Descargar Original</a> 
+                <a href="./images/foto2.jpg" download="foto2.jpg">Descargar Original</a> 
             </div>
 
             <div class="image-card">
                 <img src="./images/Soy_ghost.jpg" alt="Diagrama de Red Confidencial">
                 <p>Diagrama de arquitectura del nuevo sistema. ¡Confidencial!</p>
                 
-                <a href="./images/Soy_ghost.jpg" download="Soy_ghost.jpg">Descargar Original (CLAVE 4)</a> 
+                <a href="./images/Soy_ghost.jpg" download="Soy_ghost.jpg">Descargar Original</a> 
             </div>
 
         </div>
