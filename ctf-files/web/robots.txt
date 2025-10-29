@@ -8,3 +8,5 @@ Disallow: /config.php
 Disallow: /backup_psswd.txt
 Disallow: /images/
 Disallow: /hash.txt
+
+Disallow: /admin_memo.html

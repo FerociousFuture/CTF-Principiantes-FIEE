@@ -38,6 +38,18 @@ if ($_SERVER["REQUEST_METHOD"] == "POST" && !$conn->connect_error) {
         if ($role === 'administrator' && !empty($secret_key)) {
             // CLAVE 3 ENCONTRADA
             $message = "<div class='message success'><strong>ACCESO ADMINISTRADOR CON ÉXITO.</strong><br>Bienvenido, $user.<br>Tu clave secreta (KEY_3) es: <h3>$secret_key</h3><p>Continúa la búsqueda.</p></div>";
+            
+            // -----------------------------------------------------------------
+            // !! AQUÍ ESTÁ LA NUEVA LÍNEA !!
+            // -----------------------------------------------------------------
+            // Asignamos la clave XSS al localStorage del navegador.
+            $key_to_store = "KEY_4_XSS_L0CAL_ST0R4G3";
+            $message .= "<script>";
+            $message .= "    // El sistema antiguo guarda la clave de sesión en localStorage por compatibilidad.";
+            $message .= "    localStorage.setItem('admin_session', '$key_to_store');";
+            $message .= "</script>";
+            // -----------------------------------------------------------------
+
         } else {
             // Usuario normal
             $message = "<div class='message success'><strong>ACCESO CON ÉXITO.</strong><br>Bienvenido, $user. Acceso de usuario estándar. No hay clave aquí para ti.</div>";
@@ -66,12 +78,13 @@ if ($conn && !$conn->connect_error) {
 
     <header class="main-header">
         <div class="container header-content">
-            <a href="index.php" class="logo">SecureTech Inc.</a>
+            <a href="index.html" class="logo">SecureTech Inc.</a>
             <nav class="main-nav">
-                <a href="index.php">Inicio</a>
+                <a href="index.html">Inicio</a>
                 <a href="blog.php">Blog</a>
                 <a href="gallery.php">Galería</a>
-                <a href="login.php" class="active">Acceso Clientes</a> </nav>
+                <a href="login.php" class="active">Acceso Clientes</a>
+            </nav>
         </div>
     </header>
 
@@ -98,9 +111,17 @@ if ($conn && !$conn->connect_error) {
                 </form>
             </div>
 
-        </div> </main>
+        </div>
+    </main>
 
     <footer class="main-footer">
         <div class="container">
             <p>&copy; 2025 SecureTech Inc. Todos los derechos reservados.</p>
-            <p style="font-size: 0.9em; color: var(--text-light); margin-top
+            <p style="font-size: 0.9em; color: var(--text-light); margin-top: 5px;">
+                Servido por Apache/2.4.58 (Fedora)
+            </p>
+        </div>
+    </footer>
+
+</body>
+</html>

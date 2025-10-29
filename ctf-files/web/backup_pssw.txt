@@ -1,8 +1,3 @@
-# ARCHIVO DE RESPALDO DE CONTRASEÑAS - MIGRACIÓN DE SERVIDOR
-# ¡¡NO DEJAR EN EL SERVIDOR WEB!! - DEJAR SOLO EN LOCAL
-#
-# Credenciales de prueba y dispositivos antiguos.
-#
 admin
 password
 123456
