@@ -43,11 +43,19 @@ INSERT INTO users (username, password_hash, role) VALUES (
     'user'
 );
 
+
 -- 6. Insertar posts (incluyendo la pista de la clave XSS)
 INSERT INTO blog_posts (title, content, author) VALUES (
     'Bienvenido al Blog del CTF', 
     'Este blog ha estado desatendido.', 
     'SystemAdmin'
+);
+-- 7. Insertar el usuario para el desafío de Fuerza Bruta (Hydra)
+-- Usuario: sysadmin, Contraseña: 4321 (MD5: 827ccb0eea8a706c4c34a16891f84e7b)
+INSERT INTO users (username, password_hash, role) VALUES (
+    'sysadmin', 
+    '827ccb0eea8a706c4c34a16891f84e7b', 
+    'user'
 );
 
 INSERT INTO blog_posts (title, content, author) VALUES (

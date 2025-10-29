@@ -1,0 +1,9 @@
+User-agent: *
+
+Disallow: /admin_panel.php
+Disallow: /passwords.php
+Disallow: /key_1_intro.html
+
+Disallow: /config.php
+Disallow: /wordlist_backup.txt
+Disallow: /images/

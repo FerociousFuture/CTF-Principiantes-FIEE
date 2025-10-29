@@ -3,15 +3,13 @@
 // LÓGICA DE LOGIN (VULNERABLE A SQL INJECTION)
 // ------------------------------------------------------------------
 
-// CONFIGURACIÓN DE LA BASE DE DATOS
-$servername = "localhost";
-$username = "ctf_user"; 
-$password = "ctf_pass"; 
-$dbname = "ctf_lab";
+// 🔑 ¡ARREGLADO! Ya no hay credenciales aquí.
+require_once 'config.php';
+
 $message = ""; // Variable para almacenar mensajes de error/éxito
 
 // Crear conexión
-$conn = new mysqli($servername, $username, $password, $dbname);
+$conn = new mysqli(DB_SERVER, DB_USERNAME, DB_PASSWORD, DB_NAME);
 
 // Verificar conexión
 if ($conn->connect_error) {
@@ -26,8 +24,6 @@ if ($_SERVER["REQUEST_METHOD"] == "POST" && !$conn->connect_error) {
     $pass = $_POST['password'];
 
     // CONSTRUCCIÓN DE LA CONSULTA SQL VULNERABLE
-    // Esta consulta es vulnerable a inyección SQL.
-    // Un atacante puede usar algo como: admin' OR '1'='1
     $sql = "SELECT username, secret_key, role FROM users WHERE username = '$user' AND password_hash = MD5('$pass')";
     
     $result = $conn->query($sql);
@@ -65,14 +61,14 @@ if ($conn && !$conn->connect_error) {
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Acceso Clientes - SecureTech Inc.</title>
     <link rel="stylesheet" href="style.css">
-    </head>
+</head>
 <body>
 
     <header class="main-header">
         <div class="container header-content">
-            <a href="index.php" class="logo">SecureTech Inc.</a>
+            <a href="index.html" class="logo">SecureTech Inc.</a>
             <nav class="main-nav">
-                <a href="index.php">Inicio</a>
+                <a href="index.html">Inicio</a>
                 <a href="blog.php">Blog</a>
                 <a href="gallery.php">Galería</a>
                 <a href="login.php" class="active">Acceso Clientes</a> </nav>
@@ -107,11 +103,4 @@ if ($conn && !$conn->connect_error) {
     <footer class="main-footer">
         <div class="container">
             <p>&copy; 2025 SecureTech Inc. Todos los derechos reservados.</p>
-            <p style="font-size: 0.9em; color: var(--text-light); margin-top: 5px;">
-                Servido por Apache/2.4.58 (Fedora)
-            </p>
-        </div>
-    </footer>
-
-</body>
-</html>
+            <p style="font-size: 0.9em; color: var(--text-light); margin-top

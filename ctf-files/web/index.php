@@ -10,10 +10,10 @@
 
     <header class="main-header">
         <div class="container header-content">
-            <a href="index.php" class="logo">SecureTech Inc.</a>
+            <a href="index.html" class="logo">SecureTech Inc.</a>
             
             <nav class="main-nav">
-                <a href="index.php" class="active">Inicio</a>
+                <a href="index.html" class="active">Inicio</a>
                 <a href="blog.php">Blog</a>
                 <a href="gallery.php">Galería</a>
                 <a href="login.php">Acceso Clientes</a>
@@ -56,9 +56,5 @@
         </div>
     </footer>
 
-    <a href="key_1_intro.html" class="hidden-link">clave-secreta-1</a>
-    <a href="passwords.php" class="hidden-link">enlace-secreto-passwords</a>
-    <a href="admin_panel.php" class="hidden-link">enlace-secreto-admin</a>
-
-</body>
+    </body>
 </html>

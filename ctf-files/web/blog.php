@@ -3,16 +3,14 @@
 // LÓGICA DEL BLOG (VULNERABLE A XSS)
 // ------------------------------------------------------------------
 
-// CONFIGURACIÓN DE LA BASE DE DATOS
-$servername = "localhost";
-$username = "ctf_user"; 
-$password = "ctf_pass"; 
-$dbname = "ctf_lab";
+// 🔑 ¡ARREGLADO! Ya no hay credenciales aquí.
+require_once 'config.php';
+
 $message = "";
 $posts = []; // Array para almacenar los posts
 
 // Crear conexión
-$conn = new mysqli($servername, $username, $password, $dbname);
+$conn = new mysqli(DB_SERVER, DB_USERNAME, DB_PASSWORD, DB_NAME);
 
 if ($conn->connect_error) {
     $message = "<div class='message error'>Error de conexión a la base de datos: " . $conn->connect_error . "</div>";
@@ -20,7 +18,6 @@ if ($conn->connect_error) {
 
     // --- MANEJO DE PUBLICACIÓN DE NUEVOS COMENTARIOS ---
     if ($_SERVER["REQUEST_METHOD"] == "POST") {
-        // No sanitizamos los datos de entrada (aunque aquí usamos prepared statements)
         $new_title = $_POST['post_title'] ?? 'Sin Título';
         $new_content = $_POST['post_content'] ?? '';
         $new_author = "Participante CTF"; // Autor fijo
@@ -62,9 +59,9 @@ if ($conn->connect_error) {
 
     <header class="main-header">
         <div class="container header-content">
-            <a href="index.php" class="logo">SecureTech Inc.</a>
+            <a href="index.html" class="logo">SecureTech Inc.</a>
             <nav class="main-nav">
-                <a href="index.php">Inicio</a>
+                <a href="index.html">Inicio</a>
                 <a href="blog.php" class="active">Blog</a> <a href="gallery.php">Galería</a>
                 <a href="login.php">Acceso Clientes</a>
             </nav>
@@ -109,20 +106,10 @@ if ($conn->connect_error) {
                 // Loop a través de los posts guardados
                 foreach ($posts as $post) {
                     // VULNERABILIDAD XSS: 
-                    // Imprimimos $title, $author, y $content directamente.
-                    // Un atacante puede poner <script>alert('XSS')</script>
-                    // en el título o en el contenido.
-                    
                     echo "<div class='blog-post'>";
-                    // Vector de XSS #1: Título
                     echo "<h2>" . $post['title'] . "</h2>"; 
-                    
-                    // Vector de XSS #2: Autor (aunque aquí es fijo)
                     echo "<p class='post-meta'><strong>Autor:</strong> " . $post['author'] . "</p>";
-                    
-                    // Vector de XSS #3: Contenido (El más obvio)
                     echo "<div>" . $post['content'] . "</div>";
-                    
                     echo "</div>";
                 }
             }
