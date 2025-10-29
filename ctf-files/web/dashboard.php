@@ -90,7 +90,7 @@ $conn->close();
                     </p>
                     <p>Equipo,</p>
                     <p>La auditoría del blog está completa. El *único* hallazgo fue que el *scripting* del lado del cliente podía leer las cookies no protegidas (`HttpOnly`) del navegador.</p>
-                    <p>Nuestra cookie de <strong><code>debug_session_id</code></strong> fue expuesta por un `alert()` en la prueba. Consideren esto como un hallazgo de prioridad media.</p>
+                    <p>Nuestra cookie de <strong><code>document.cookie</code></strong> fue expuesta por un `alert()` en la prueba. Consideren esto como un hallazgo de prioridad media.</p>
                 </div>
             </div>
 
