@@ -3,7 +3,6 @@
 // LÓGICA DE LOGIN (VULNERABLE A SQL INJECTION)
 // ------------------------------------------------------------------
 
-// 🔑 ¡ARREGLADO! Ya no hay credenciales aquí.
 require_once 'config.php';
 
 $message = ""; // Variable para almacenar mensajes de error/éxito

@@ -3,7 +3,7 @@
 // LÓGICA DEL BLOG (VULNERABLE A XSS)
 // ------------------------------------------------------------------
 
-// 🔑 ¡ARREGLADO! Ya no hay credenciales aquí.
+// 🔑 Incluir el archivo de configuración
 require_once 'config.php';
 
 $message = "";
@@ -15,6 +15,24 @@ $conn = new mysqli(DB_SERVER, DB_USERNAME, DB_PASSWORD, DB_NAME);
 if ($conn->connect_error) {
     $message = "<div class='message error'>Error de conexión a la base de datos: " . $conn->connect_error . "</div>";
 } else {
+
+    // -----------------------------------------------------------------
+    // ¡NUEVO! - LÓGICA PARA BORRAR POSTS
+    // -----------------------------------------------------------------
+    // Comprueba si la URL tiene un parámetro 'delete_id'
+    if (isset($_GET['delete_id'])) {
+        // Convertimos a (int) para una seguridad simple contra SQLi en esta función
+        $delete_id = (int)$_GET['delete_id']; 
+        
+        $stmt = $conn->prepare("DELETE FROM blog_posts WHERE id = ?");
+        $stmt->bind_param("i", $delete_id);
+        $stmt->execute();
+        $stmt->close();
+        
+        // Redirige a blog.php para limpiar la URL (evita borrado en recarga)
+        header("Location: blog.php");
+        exit;
+    }
 
     // --- MANEJO DE PUBLICACIÓN DE NUEVOS COMENTARIOS ---
     if ($_SERVER["REQUEST_METHOD"] == "POST") {
@@ -34,7 +52,8 @@ if ($conn->connect_error) {
     }
     
     // --- MOSTRAR TODOS LOS POSTS (VULNERABILIDAD AL MOSTRAR) ---
-    $sql = "SELECT title, content, author FROM blog_posts ORDER BY id DESC";
+    // ¡NUEVO! - Se añadió 'id' a la consulta SELECT
+    $sql = "SELECT id, title, content, author FROM blog_posts ORDER BY id DESC";
     $result = $conn->query($sql);
 
     if ($result && $result->num_rows > 0) {
@@ -107,6 +126,17 @@ if ($conn->connect_error) {
                 foreach ($posts as $post) {
                     // VULNERABILIDAD XSS: 
                     echo "<div class='blog-post'>";
+                    
+                    // -----------------------------------------------------------------
+                    // ¡NUEVO! - Enlace para borrar el post
+                    // -----------------------------------------------------------------
+                    echo "<a href='blog.php?delete_id=" . $post['id'] . "' 
+                           style='float: right; color: #dc3545; text-decoration: none; font-weight: bold; margin-left: 10px;' 
+                           title='Borrar este post'>
+                           [X] Borrar
+                         </a>";
+                    // -----------------------------------------------------------------
+                    
                     echo "<h2>" . $post['title'] . "</h2>"; 
                     echo "<p class='post-meta'><strong>Autor:</strong> " . $post['author'] . "</p>";
                     echo "<div>" . $post['content'] . "</div>";
