@@ -3,64 +3,58 @@
 // LÓGICA DE LOGIN (VULNERABLE A SQL INJECTION)
 // ------------------------------------------------------------------
 
+// ¡IMPORTANTE! Iniciar la sesión al principio de todo.
+session_start();
+
 require_once 'config.php';
+$message = "";
 
-$message = ""; // Variable para almacenar mensajes de error/éxito
-
-// Crear conexión
-$conn = new mysqli(DB_SERVER, DB_USERNAME, DB_PASSWORD, DB_NAME);
-
-// Verificar conexión
-if ($conn->connect_error) {
-    // Usamos la clase .error del CSS global
-    $message = "<div class='message error'>Error de conexión a la base de datos: " . $conn->connect_error . "</div>";
+// Redirigir si el usuario ya está logueado como admin
+if (isset($_SESSION['role']) && $_SESSION['role'] === 'administrator') {
+    header("Location: dashboard.php");
+    exit;
 }
 
-// Procesar el formulario cuando se envía
+$conn = new mysqli(DB_SERVER, DB_USERNAME, DB_PASSWORD, DB_NAME);
+
+if ($conn->connect_error) {
+    $message = "<div class='message error'>Error de conexión a la base de datos.</div>";
+}
+
 if ($_SERVER["REQUEST_METHOD"] == "POST" && !$conn->connect_error) {
-    // Recoger datos del formulario (¡SIN SANITIZAR!)
     $user = $_POST['username'];
     $pass = $_POST['password'];
 
-    // CONSTRUCCIÓN DE LA CONSULTA SQL VULNERABLE
-    $sql = "SELECT username, secret_key, role FROM users WHERE username = '$user' AND password_hash = MD5('$pass')";
+    // VULNERABILIDAD SQLi
+    // La consulta ahora pide el 'id' para guardarlo en la sesión
+    $sql = "SELECT id, username, secret_key, role FROM users WHERE username = '$user' AND password_hash = MD5('$pass')";
     
     $result = $conn->query($sql);
 
     if ($result && $result->num_rows > 0) {
-        // Usuario encontrado
         $row = $result->fetch_assoc();
         $role = $row['role'];
-        $secret_key = $row['secret_key'];
-        
-        // Comprobar si es administrador y tiene clave
-        if ($role === 'administrator' && !empty($secret_key)) {
-            // CLAVE 3 ENCONTRADA
-            $message = "<div class='message success'><strong>ACCESO ADMINISTRADOR CON ÉXITO.</strong><br>Bienvenido, $user.<br>Tu clave secreta (KEY_3) es: <h3>$secret_key</h3><p>Continúa la búsqueda.</p></div>";
-            
-            // -----------------------------------------------------------------
-            // !! AQUÍ ESTÁ LA NUEVA LÍNEA !!
-            // -----------------------------------------------------------------
-            // Asignamos la clave XSS al localStorage del navegador.
-            $key_to_store = "KEY_4_XSS_L0CAL_ST0R4G3";
-            $message .= "<script>";
-            $message .= "    // El sistema antiguo guarda la clave de sesión en localStorage por compatibilidad.";
-            $message .= "    localStorage.setItem('admin_session', '$key_to_store');";
-            $message .= "</script>";
-            // -----------------------------------------------------------------
 
+        if ($role === 'administrator') {
+            // ¡ÉXITO!
+            // Guardamos los datos del admin en la sesión
+            $_SESSION['user_id'] = $row['id'];
+            $_SESSION['username'] = $row['username'];
+            $_SESSION['role'] = $row['role'];
+            
+            // Redirigimos al panel de control
+            header("Location: dashboard.php");
+            $conn->close();
+            exit; // Importante salir después de redirigir
+            
         } else {
-            // Usuario normal
-            $message = "<div class='message success'><strong>ACCESO CON ÉXITO.</strong><br>Bienvenido, $user. Acceso de usuario estándar. No hay clave aquí para ti.</div>";
+            // Usuario normal (no nos interesa para este CTF)
+            $message = "<div class='message error'>Acceso de usuario estándar no permitido en este panel.</div>";
         }
     } else {
         // Error de login
         $message = "<div class='message error'>Usuario o contraseña incorrectos.</div>";
     }
-}
-
-// Cerrar la conexión
-if ($conn && !$conn->connect_error) {
     $conn->close();
 }
 ?>
@@ -76,20 +70,10 @@ if ($conn && !$conn->connect_error) {
 <body>
 
     <header class="main-header">
-        <div class="container header-content">
-            <a href="index.html" class="logo">SecureTech Inc.</a>
-            <nav class="main-nav">
-                <a href="index.html">Inicio</a>
-                <a href="blog.php">Blog</a>
-                <a href="gallery.php">Galería</a>
-                <a href="login.php" class="active">Acceso Clientes</a>
-            </nav>
-        </div>
-    </header>
+        </header>
 
     <main class="page-content">
         <div class="container">
-            
             <div class="content-box">
                 <h2 style="text-align: center;">Portal de Acceso a Clientes</h2>
                 
@@ -109,18 +93,11 @@ if ($conn && !$conn->connect_error) {
                     <input type="submit" value="Iniciar Sesión">
                 </form>
             </div>
-
         </div>
     </main>
 
     <footer class="main-footer">
-        <div class="container">
-            <p>&copy; 2025 SecureTech Inc. Todos los derechos reservados.</p>
-            <p style="font-size: 0.9em; color: var(--text-light); margin-top: 5px;">
-                Servido por Apache/2.4.58 (Fedora)
-            </p>
-        </div>
-    </footer>
+        </footer>
 
 </body>
 </html>
