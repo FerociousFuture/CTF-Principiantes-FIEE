@@ -3,8 +3,6 @@
 // LÓGICA DE LOGIN (VULNERABLE A FUERZA BRUTA - VERSIÓN CON BD)
 // ------------------------------------------------------------------
 
-// 🔑 ¡IMPORTANTE! Esta línea DEBE estar al principio.
-// Si 'config.php' no existe, la página fallará.
 require_once 'config.php';
 
 $message = "";
