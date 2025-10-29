@@ -66,9 +66,9 @@ if ($conn && !$conn->connect_error) {
 
     <header class="main-header">
         <div class="container header-content">
-            <a href="index.html" class="logo">SecureTech Inc.</a>
+            <a href="index.php" class="logo">SecureTech Inc.</a>
             <nav class="main-nav">
-                <a href="index.html">Inicio</a>
+                <a href="index.php">Inicio</a>
                 <a href="blog.php">Blog</a>
                 <a href="gallery.php">Galería</a>
                 <a href="login.php" class="active">Acceso Clientes</a> </nav>
