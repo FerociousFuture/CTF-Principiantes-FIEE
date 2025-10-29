@@ -17,15 +17,18 @@ if ($conn->connect_error) {
 } else {
 
     // -----------------------------------------------------------------
-    // ¡NUEVO! - LÓGICA PARA BORRAR POSTS
+    // ¡NUEVO! - LÓGICA PARA BORRAR POSTS PROPIOS
     // -----------------------------------------------------------------
     // Comprueba si la URL tiene un parámetro 'delete_id'
     if (isset($_GET['delete_id'])) {
-        // Convertimos a (int) para una seguridad simple contra SQLi en esta función
-        $delete_id = (int)$_GET['delete_id']; 
+        $delete_id = (int)$_GET['delete_id'];
         
-        $stmt = $conn->prepare("DELETE FROM blog_posts WHERE id = ?");
-        $stmt->bind_param("i", $delete_id);
+        // ¡CAMBIO CLAVE! - Solo podemos borrar posts de "Participante CTF"
+        $author_to_delete = "Participante CTF"; 
+        
+        // La consulta ahora comprueba tanto el ID como el Autor
+        $stmt = $conn->prepare("DELETE FROM blog_posts WHERE id = ? AND author = ?");
+        $stmt->bind_param("is", $delete_id, $author_to_delete);
         $stmt->execute();
         $stmt->close();
         
@@ -52,7 +55,6 @@ if ($conn->connect_error) {
     }
     
     // --- MOSTRAR TODOS LOS POSTS (VULNERABILIDAD AL MOSTRAR) ---
-    // ¡NUEVO! - Se añadió 'id' a la consulta SELECT
     $sql = "SELECT id, title, content, author FROM blog_posts ORDER BY id DESC";
     $result = $conn->query($sql);
 
@@ -128,13 +130,16 @@ if ($conn->connect_error) {
                     echo "<div class='blog-post'>";
                     
                     // -----------------------------------------------------------------
-                    // ¡NUEVO! - Enlace para borrar el post
+                    // ¡NUEVO! - El botón solo aparece si el autor es "Participante CTF"
                     // -----------------------------------------------------------------
-                    echo "<a href='blog.php?delete_id=" . $post['id'] . "' 
-                           style='float: right; color: #dc3545; text-decoration: none; font-weight: bold; margin-left: 10px;' 
-                           title='Borrar este post'>
-                           [X] Borrar
-                         </a>";
+                    if ($post['author'] === 'Participante CTF') {
+                        echo "<a href='blog.php?delete_id=" . $post['id'] . "' 
+                               style='float: right; color: #dc3545; text-decoration: none; font-weight: bold; margin-left: 10px;' 
+                               title='Borrar este post'
+                               onclick=\"return confirm('¿Estás seguro de que quieres borrar este post?');\">
+                               [X] Borrar
+                             </a>";
+                    }
                     // -----------------------------------------------------------------
                     
                     echo "<h2>" . $post['title'] . "</h2>"; 
