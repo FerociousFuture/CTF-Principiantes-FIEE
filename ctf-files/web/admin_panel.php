@@ -3,7 +3,8 @@
 // LÓGICA DE LOGIN (VULNERABLE A FUERZA BRUTA - VERSIÓN CON BD)
 // ------------------------------------------------------------------
 
-// 🔑 ¡ARREGLADO! Ya no hay credenciales aquí.
+// 🔑 ¡IMPORTANTE! Esta línea DEBE estar al principio.
+// Si 'config.php' no existe, la página fallará.
 require_once 'config.php';
 
 $message = "";
@@ -68,4 +69,39 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
         <div class="container">
             
             <div class="content-box">
-                <h2 style="text-align: center;">Acceso de Administrador del
+                <h2 style="text-align: center;">Acceso de Administrador del Sistema</h2>
+                <p style="text-align: center; color: var(--text-light); margin-top: -10px;">
+                    Este panel es solo para personal autorizado.
+                </p>
+
+                <?php echo $message; ?>
+
+                <form method="post" action="admin_panel.php">
+                    <div class="form-group">
+                        <label for="admin_user">Usuario:</label>
+                        <input type="text" id="admin_user" name="admin_user" placeholder="Nombre de usuario" required>
+                    </div>
+                    
+                    <div class="form-group">
+                        <label for="admin_pass">Contraseña:</label>
+                        <input type="password" id="admin_pass" name="admin_pass" placeholder="Contraseña" required>
+                    </div>
+                    
+                    <input type="submit" value="Iniciar Sesión">
+                </form>
+            </div>
+
+        </div> 
+    </main>
+
+    <footer class="main-footer">
+        <div class="container">
+            <p>&copy; 2025 SecureTech Inc. Todos los derechos reservados.</p>
+            <p style="font-size: 0.9em; color: var(--text-light); margin-top: 5px;">
+                Servido por Apache/2.4.58 (Fedora)
+            </p>
+        </div>
+    </footer>
+
+</body>
+</html>

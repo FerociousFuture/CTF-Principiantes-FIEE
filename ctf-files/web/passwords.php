@@ -47,18 +47,9 @@
                     </ul>
                 </div>
 
-                <div class="clave-box" style="margin-top: 1.5rem;">
-                    <h3>Vulnerabilidad #2: Panel de Administrador con Contraseña Débil</h3>
-                    <p>Se ha identificado un panel de administrador no documentado y protegido por una contraseña trivial.</p>
-                    <ul>
-                        <li><strong>URL del Panel:</strong> <code>admin_panel.php</code></li>
-                        <li><strong>Usuario:</strong> <code>sysadmin</code></li>
-                        <li><strong>Debilidad:</strong> La contraseña es un PIN numérico de 4 dígitos.</li>
-                        <li><strong>Acción Requerida:</strong> Realizar un ataque de fuerza bruta (ej. Hydra) para confirmar el acceso.</li>
-                    </ul>
-                </div>
-
-            </div> </div> </main>
+                </div> 
+        </div> 
+    </main>
 
     <footer class="main-footer">
         <div class="container">
