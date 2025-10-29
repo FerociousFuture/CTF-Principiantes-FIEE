@@ -3,6 +3,17 @@
 // LÓGICA DEL BLOG (VULNERABLE A XSS)
 // ------------------------------------------------------------------
 
+// -----------------------------------------------------------------
+// !! AQUÍ ESTÁ LA NUEVA CLAVE OCULTA !!
+// -----------------------------------------------------------------
+// Enviamos la clave como un cookie.
+// Es invisible para "View Source" (Ctrl+U) pero
+// se puede robar con 'document.cookie'
+// -----------------------------------------------------------------
+$cookie_name = "debug_session_id";
+$cookie_value = "KEY_4_XSS_C00KIE_FTW";
+setcookie($cookie_name, $cookie_value, time() + 3600, "/"); // Expira en 1 hora
+
 // 🔑 Incluir el archivo de configuración
 require_once 'config.php';
 
@@ -16,23 +27,16 @@ if ($conn->connect_error) {
     $message = "<div class='message error'>Error de conexión a la base de datos: " . $conn->connect_error . "</div>";
 } else {
 
-    // -----------------------------------------------------------------
-    // ¡NUEVO! - LÓGICA PARA BORRAR POSTS PROPIOS
-    // -----------------------------------------------------------------
-    // Comprueba si la URL tiene un parámetro 'delete_id'
+    // --- LÓGICA PARA BORRAR POSTS PROPIOS ---
     if (isset($_GET['delete_id'])) {
         $delete_id = (int)$_GET['delete_id'];
-        
-        // ¡CAMBIO CLAVE! - Solo podemos borrar posts de "Participante CTF"
         $author_to_delete = "Participante CTF"; 
         
-        // La consulta ahora comprueba tanto el ID como el Autor
         $stmt = $conn->prepare("DELETE FROM blog_posts WHERE id = ? AND author = ?");
         $stmt->bind_param("is", $delete_id, $author_to_delete);
         $stmt->execute();
         $stmt->close();
         
-        // Redirige a blog.php para limpiar la URL (evita borrado en recarga)
         header("Location: blog.php");
         exit;
     }
@@ -72,10 +76,11 @@ if ($conn->connect_error) {
 <html lang="es">
 <head>
     <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="viewport" content="width=device-width, initial-scale1.0">
     <title>Blog - SecureTech Inc.</title>
     <link rel="stylesheet" href="style.css">
-</head>
+
+    </head>
 <body>
 
     <header class="main-header">
@@ -129,9 +134,6 @@ if ($conn->connect_error) {
                     // VULNERABILIDAD XSS: 
                     echo "<div class='blog-post'>";
                     
-                    // -----------------------------------------------------------------
-                    // ¡NUEVO! - El botón solo aparece si el autor es "Participante CTF"
-                    // -----------------------------------------------------------------
                     if ($post['author'] === 'Participante CTF') {
                         echo "<a href='blog.php?delete_id=" . $post['id'] . "' 
                                style='float: right; color: #dc3545; text-decoration: none; font-weight: bold; margin-left: 10px;' 
@@ -140,7 +142,6 @@ if ($conn->connect_error) {
                                [X] Borrar
                              </a>";
                     }
-                    // -----------------------------------------------------------------
                     
                     echo "<h2>" . $post['title'] . "</h2>"; 
                     echo "<p class='post-meta'><strong>Autor:</strong> " . $post['author'] . "</p>";
