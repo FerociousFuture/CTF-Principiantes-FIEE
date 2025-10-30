@@ -34,7 +34,7 @@
 
                 <hr style="border: 0; border-top: 1px solid var(--border-color); margin: 2rem 0;">
 
-                <h3>Resultados de la Auditoría (Pistas)</h3>
+                <h3>Resultados de la Auditoría</h3>
                 <p>Se han identificado las siguientes vulnerabilidades pendientes de revisión:</p>
 
                 <div class="clave-box">
