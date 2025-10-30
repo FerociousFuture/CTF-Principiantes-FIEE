@@ -4,7 +4,7 @@ Disallow: /admin_panel.php
 Disallow: /passwords.php
 Disallow: /key_1_intro.html
 
-Disallow: /backup_psswd.txt
+Disallow: /backup_pssw.txt
 Disallow: /images/
 Disallow: /hash.txt
 
