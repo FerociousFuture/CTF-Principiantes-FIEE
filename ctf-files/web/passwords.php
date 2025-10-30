@@ -41,7 +41,7 @@
                     <h3>Vulnerabilidad #1: Archivo de Hash Expuesto</h3>
                     <p>Se ha detectado un archivo de prueba con credenciales hasheadas en una ubicación pública.</p>
                     <ul>
-                        <li><strong>Archivo:</strong> <code>/var/www/html/hashes.txt</code></li>
+                        <li><strong>Archivo:</strong> <code>/var/www/html/hash.txt</code></li>
                         <li><strong>Formato:</strong> MD5</li>
                         <li><strong>Acción Requerida:</strong> Crackear el hash para obtener la <strong>Clave 5</strong> y reportarla.</li>
                     </ul>
