@@ -75,8 +75,16 @@ if ($_SERVER["REQUEST_METHOD"] == "POST" && !$conn->connect_error) {
 <body>
 
     <header class="main-header">
-        </header>
-
+        <div class="container header-content">
+            <a href="index.php" class="logo">SecureTech Inc.</a>
+            <nav class="main-nav">
+                <a href="index.php">Inicio</a>
+                <a href="blog.php">Blog</a>
+                <a href="gallery.php">Galería</a>
+                <a href="login.php" class="active">Acceso Clientes</a>
+            </nav>
+        </div>
+    </header>
     <main class="page-content">
         <div class="container">
             <div class="content-box">
@@ -102,7 +110,12 @@ if ($_SERVER["REQUEST_METHOD"] == "POST" && !$conn->connect_error) {
     </main>
 
     <footer class="main-footer">
-        </footer>
-
-</body>
+        <div class="container">
+            <p>&copy; 2025 SecureTech Inc. Todos los derechos reservados.</p>
+            <p style="font-size: 0.9em; color: var(--text-light); margin-top: 5px;">
+                Servido por Apache/2.4.58 (Fedora)
+            </p>
+        </div>
+    </footer>
+    </body>
 </html>
