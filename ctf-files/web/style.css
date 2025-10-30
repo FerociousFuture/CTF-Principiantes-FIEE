@@ -1,14 +1,17 @@
 /* ctf-files/web/style.css */
-/* Versión 2.0 - Estilo Corporativo/Empresarial */
+/* Estilos base para la aplicación corporativa */
 
 :root {
-    --brand-primary: #0056b3; /* Un azul corporativo más profundo */
-    --brand-secondary: #007bff; /* Azul más brillante para acentos */
+    /* Paleta de colores principal */
+    --brand-primary: #0056b3;
+    --brand-secondary: #007bff;
     --text-dark: #212529;
     --text-light: #6c757d;
-    --bg-light: #f8f9fa; /* Fondo de página gris muy claro */
+    --bg-light: #f8f9fa;
     --bg-white: #ffffff;
     --border-color: #dee2e6;
+
+    /* Paleta de colores para notificaciones */
     --color-success: #155724;
     --bg-success: #d4edda;
     --color-danger: #721c24;
@@ -17,7 +20,7 @@
     --bg-warning: #fff3cd;
 }
 
-/* --- 1. Globales y Tipografía --- */
+/* 1. Reseteo Global y Tipografía */
 
 * {
     box-sizing: border-box;
@@ -69,22 +72,11 @@ img {
     height: auto;
 }
 
-/* --- 2. Estructura de Página y Contenedores --- */
-
-/* Uso de HTML esperado:
-   <body>
-     <header class="main-header">...</header>
-     <main class="page-content">
-       <div class="container">
-         </div>
-     </main>
-     <footer class="main-footer">...</footer>
-   </body>
-*/
+/* 2. Layout y Contenedores Principales */
 
 .container {
     width: 90%;
-    max-width: 1140px; /* Ancho estándar para sitios corporativos */
+    max-width: 1140px;
     margin: 0 auto;
     padding: 0 15px;
 }
@@ -131,27 +123,27 @@ img {
 }
 
 .page-content {
-    flex-grow: 1; /* Empuja el footer hacia abajo */
+    flex-grow: 1; /* Asegura que el contenido principal ocupe el espacio disponible */
     padding: 2.5rem 0;
 }
 
-/* El contenedor principal para formularios, etc. */
+/* Contenedor genérico para contenido (formularios, etc.) */
 .content-box {
     background-color: var(--bg-white);
     padding: 2rem 2.5rem;
     border-radius: 8px;
     box-shadow: 0 4px 12px rgba(0, 0, 0, 0.08);
     max-width: 700px;
-    margin: 0 auto; /* Centra la caja de login/registro */
+    margin: 0 auto; 
 }
 
 .main-footer {
     width: 100%;
-    background-color: #343a40; /* Footer oscuro */
+    background-color: #343a40;
     color: var(--bg-light);
     padding: 2rem 0;
     text-align: center;
-    margin-top: auto; /* Se pega al fondo */
+    margin-top: auto; /* Asegura que el footer se mantenga al fondo */
 }
 
 .main-footer p {
@@ -159,7 +151,7 @@ img {
     color: var(--text-light);
 }
 
-/* --- 3. Formularios y Botones --- */
+/* 3. Estilos de Formularios y Botones */
 
 form {
     width: 100%;
@@ -198,7 +190,7 @@ textarea:focus {
     outline: none;
 }
 
-/* Estilo de Botón Genérico */
+/* Clase base para botones */
 .btn {
     display: inline-block;
     width: 100%;
@@ -223,12 +215,12 @@ textarea:focus {
 }
 
 .btn-primary:hover {
-    background-color: #004a99; /* Un poco más oscuro */
+    background-color: #004a99;
     color: var(--bg-white);
     text-decoration: none;
 }
 
-/* Para compatibilidad con <input type="submit"> */
+/* Estilos para input[type="submit"] */
 input[type="submit"] {
     display: inline-block;
     width: 100%;
@@ -250,7 +242,7 @@ input[type="submit"]:hover {
 }
 
 
-/* --- 4. Mensajes y Alertas --- */
+/* 4. Notificaciones y Alertas */
 
 .message {
     margin: 1rem 0;
@@ -273,9 +265,9 @@ input[type="submit"]:hover {
     border-color: #c3e6cb;
 }
 
-/* --- 5. Componentes Específicos (Blog, Galería, CTF) --- */
+/* 5. Estilos de Componentes */
 
-/* Para una página de blog */
+/* Estilo para entradas de blog */
 .blog-post {
     background-color: var(--bg-white);
     padding: 2rem;
@@ -290,7 +282,7 @@ input[type="submit"]:hover {
     margin-bottom: 1rem;
 }
 
-/* Para una página de galería */
+/* Grid para la galería de imágenes */
 .gallery-grid {
     display: grid;
     grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
@@ -315,7 +307,7 @@ input[type="submit"]:hover {
     margin: 0;
 }
 
-/* Clave Oculta (Estilo Advertencia) */
+/* Contenedor de advertencia (para pistas) */
 .clave-box {
     margin-top: 1.5rem;
     background-color: var(--bg-warning);
@@ -331,8 +323,8 @@ input[type="submit"]:hover {
     margin-bottom: 0.5rem;
 }
 
-/* Para el Scrapping */
+/* Oculta un enlace visualmente pero lo mantiene accesible */
 .hidden-link {
     position: absolute;
-    left: -9999px;
+    left: -9999px; 
 }

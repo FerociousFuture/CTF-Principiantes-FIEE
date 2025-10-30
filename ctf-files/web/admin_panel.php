@@ -1,21 +1,22 @@
 <?php
 // ------------------------------------------------------------------
-// LÓGICA DE LOGIN (VULNERABLE A FUERZA BRUTA - VERSIÓN CON BD)
+// admin_panel.php: Lógica de autenticación y gestión de sesión.
 // ------------------------------------------------------------------
 
-// ¡IMPORTANTE! Iniciar la sesión al principio de todo.
+// Inicia o reanuda la sesión.
 session_start();
 
-// 🔑 Incluir el archivo de configuración
+// Carga la configuración de la base de datos.
 require_once 'config.php';
 
 $message = "";
-$is_logged_in = false; // Variable para controlar qué mostramos
+$is_logged_in = false; // Flag para el estado de autenticación.
 
 // -----------------------------------------------------------------
-// 1. MANEJO DE CIERRE DE SESIÓN (LOGOUT)
+// 1. Manejo de cierre de sesión (logout)
 // -----------------------------------------------------------------
 if (isset($_GET['logout'])) {
+    // Destruye la sesión si se recibe el parámetro 'logout'.
     session_unset();
     session_destroy();
     header("Location: admin_panel.php");
@@ -23,14 +24,15 @@ if (isset($_GET['logout'])) {
 }
 
 // -----------------------------------------------------------------
-// 2. COMPROBAR SI YA EXISTE UNA SESIÓN
+// 2. Verificación de sesión activa
 // -----------------------------------------------------------------
 if (isset($_SESSION['admin_logged_in']) && $_SESSION['admin_logged_in'] === true) {
+    // Comprueba si el usuario ya está validado en la sesión.
     $is_logged_in = true;
 }
 
 // -----------------------------------------------------------------
-// 3. PROCESAR INTENTO DE LOGIN (SI NO ESTÁ LOGUEADO)
+// 3. Procesar formulario de login (solo si no está logueado)
 // -----------------------------------------------------------------
 if ($_SERVER["REQUEST_METHOD"] == "POST" && !$is_logged_in) {
     
@@ -43,8 +45,11 @@ if ($_SERVER["REQUEST_METHOD"] == "POST" && !$is_logged_in) {
         
         $user = $_POST['admin_user'] ?? '';
         $pass = $_POST['admin_pass'] ?? '';
+        
+        // Hashea la contraseña recibida (vulnerable, MD5).
         $pass_hash = md5($pass); 
 
+        // Prepara la consulta para validar credenciales.
         $stmt = $conn->prepare("SELECT * FROM users WHERE username = ? AND password_hash = ?");
         $stmt->bind_param("ss", $user, $pass_hash);
         $stmt->execute();
@@ -53,11 +58,11 @@ if ($_SERVER["REQUEST_METHOD"] == "POST" && !$is_logged_in) {
         // Lógica de autenticación
         if ($result->num_rows > 0 && $user === 'sysadmin') {
             
-            // ¡ÉXITO! Establecemos la sesión
+            // Si las credenciales son correctas, establece la variable de sesión.
             $_SESSION['admin_logged_in'] = true;
             $is_logged_in = true;
             
-            // Recargamos la página para mostrar el panel de admin
+            // Redirige para cargar el panel de admin.
             header("Location: admin_panel.php"); 
             exit;
             

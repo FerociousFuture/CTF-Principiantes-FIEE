@@ -2,8 +2,7 @@
 // --------------------------------------------------------
 // ARCHIVO DE CONFIGURACIÓN DE LA BASE DE DATOS
 // --------------------------------------------------------
-// Almacena todas las credenciales en un solo lugar.
-// --------------------------------------------------------
+
 
 define('DB_SERVER', 'localhost');
 define('DB_USERNAME', 'ctf_user');

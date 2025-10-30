@@ -1,16 +1,14 @@
 <?php
-// Iniciar la sesión para leer las variables
+// Inicia o reanuda la sesión para leer variables.
 session_start();
 
-// -----------------------------------------------------------------
-// PROTEGER LA PÁGINA
-// -----------------------------------------------------------------
-// Si el usuario no está logueado o no es admin, lo echamos.
+// Verifica la autenticación y el rol del administrador.
+// Deniega el acceso si la sesión no es válida.
 if (!isset($_SESSION['role']) || $_SESSION['role'] !== 'administrator') {
     die("Acceso denegado. <a href='login.php'>Inicia sesión</a>");
 }
 
-// Incluir config y conectar a la BD
+// Carga la configuración y establece la conexión DB.
 require_once 'config.php';
 $conn = new mysqli(DB_SERVER, DB_USERNAME, DB_PASSWORD, DB_NAME);
 
@@ -18,10 +16,8 @@ if ($conn->connect_error) {
     die("Error de conexión.");
 }
 
-// -----------------------------------------------------------------
-// OBTENER LA CLAVE SQLi
-// -----------------------------------------------------------------
-// Usamos el ID de la sesión para buscar la clave del admin
+// Obtiene la clave secreta del administrador desde la base de datos.
+// Se utiliza el ID de usuario almacenado en la sesión.
 $user_id = (int)$_SESSION['user_id'];
 $secret_key = "CLAVE NO ENCONTRADA";
 
@@ -32,7 +28,7 @@ $result = $stmt->get_result();
 
 if ($result->num_rows > 0) {
     $row = $result->fetch_assoc();
-    $secret_key = htmlspecialchars($row['secret_key']); // Sanitizar por si acaso
+    $secret_key = htmlspecialchars($row['secret_key']);
 }
 $stmt->close();
 $conn->close();

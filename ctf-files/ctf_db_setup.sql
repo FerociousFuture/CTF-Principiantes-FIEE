@@ -22,12 +22,12 @@ CREATE TABLE IF NOT EXISTS blog_posts (
     author VARCHAR(50) NOT NULL
 );
 
--- 3. ¡CORRECCIÓN! Limpiar datos existentes para reejecución segura
+-- 3. Limpiar datos existentes para reejecución segura
 -- Esto evita el error "Duplicate entry" si el script se corre de nuevo.
 DELETE FROM users;
 DELETE FROM blog_posts;
 
--- 4. Insertar el usuario administrador (adminpassword = 1234, hash MD5: 81dc9bdb52d04dc20036dbd8313ed055)
+-- 4. Insertar el usuario administrador (adminpassword = 12345, hash MD5: 81dc9bdb52d04dc20036dbd8313ed055)
 -- Este usuario es el objetivo de la inyección SQL para obtener la clave.
 INSERT INTO users (username, password_hash, role, secret_key) VALUES (
     'admin', 

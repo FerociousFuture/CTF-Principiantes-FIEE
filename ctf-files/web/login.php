@@ -1,32 +1,36 @@
 <?php
 // ------------------------------------------------------------------
-// LÓGICA DE LOGIN (VULNERABLE A SQL INJECTION)
+// login.php: Procesa la autenticación de usuarios.
+// Vulnerable a Inyección SQL.
 // ------------------------------------------------------------------
 
-// ¡IMPORTANTE! Iniciar la sesión al principio de todo.
+// Inicia o reanuda la sesión.
 session_start();
 
+// Carga la configuración de la base de datos.
 require_once 'config.php';
 $message = "";
 
-// Redirigir si el usuario ya está logueado como admin
+// Redirige al dashboard si ya existe una sesión de administrador.
 if (isset($_SESSION['role']) && $_SESSION['role'] === 'administrator') {
     header("Location: dashboard.php");
     exit;
 }
 
+// Establece la conexión con la base de datos.
 $conn = new mysqli(DB_SERVER, DB_USERNAME, DB_PASSWORD, DB_NAME);
 
 if ($conn->connect_error) {
     $message = "<div class='message error'>Error de conexión a la base de datos.</div>";
 }
 
+// Procesa el formulario si se envió por POST y la conexión es válida.
 if ($_SERVER["REQUEST_METHOD"] == "POST" && !$conn->connect_error) {
     $user = $_POST['username'];
     $pass = $_POST['password'];
 
-    // VULNERABILIDAD SQLi
-    // La consulta ahora pide el 'id' para guardarlo en la sesión
+    // Consulta vulnerable a SQL Injection.
+    // La consulta obtiene 'id' para almacenarlo en la sesión.
     $sql = "SELECT id, username, secret_key, role FROM users WHERE username = '$user' AND password_hash = MD5('$pass')";
     
     $result = $conn->query($sql);
@@ -36,23 +40,24 @@ if ($_SERVER["REQUEST_METHOD"] == "POST" && !$conn->connect_error) {
         $role = $row['role'];
 
         if ($role === 'administrator') {
-            // ¡ÉXITO!
-            // Guardamos los datos del admin en la sesión
+            // Autenticación exitosa.
+            // Almacena los datos del administrador en la sesión.
             $_SESSION['user_id'] = $row['id'];
             $_SESSION['username'] = $row['username'];
             $_SESSION['role'] = $row['role'];
             
-            // Redirigimos al panel de control
+            // Redirige al panel de administrador.
             header("Location: dashboard.php");
             $conn->close();
-            exit; // Importante salir después de redirigir
+            // Termina la ejecución del script después de la redirección.
+            exit; 
             
         } else {
-            // Usuario normal (no nos interesa para este CTF)
+            // Bloquea a usuarios no administradores.
             $message = "<div class='message error'>Acceso de usuario estándar no permitido en este panel.</div>";
         }
     } else {
-        // Error de login
+        // Fallo de autenticación.
         $message = "<div class='message error'>Usuario o contraseña incorrectos.</div>";
     }
     $conn->close();
