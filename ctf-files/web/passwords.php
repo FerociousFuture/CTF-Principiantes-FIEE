@@ -2,7 +2,7 @@
 <html lang="es">
 <head>
     <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="viewport" content="width=device-width, initial-scale-1.0">
     <title>Auditoría Interna - SecureTech Inc.</title>
     <link rel="stylesheet" href="style.css">
 </head>
@@ -47,7 +47,16 @@
                     </ul>
                 </div>
 
-                </div> 
+                <div class="clave-box" style="margin-top: 1.5rem;">
+                    <h3>Vulnerabilidad #2: Acceso Interno con Credenciales Débiles</h3>
+                    <p>Se ha identificado que un panel de administración interno (<code>admin_panel.php</code>) carece de una política de bloqueo de intentos fallidos, lo que permite la <strong>adivinación automatizada de contraseñas</strong> (fuerza bruta).</p>
+                    <p>Se aconseja a los administradores que revisen los archivos expuestos en <code>robots.txt</code>, ya que se han encontrado listas de contraseñas de texto plano (<code>*.txt</code>) dejadas por desarrolladores que facilitaron esta auditoría.</p>
+                    <ul>
+                        <li><strong>Acción Requerida:</strong> Implementar un límite de intentos y sanear los archivos de respaldo del directorio web.</li>
+                    </ul>
+                </div>
+
+            </div> 
         </div> 
     </main>
 
