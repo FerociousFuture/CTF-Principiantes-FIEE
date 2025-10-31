@@ -5,7 +5,7 @@
 
 // Establece un cookie de depuración no-HttpOnly, visible para JavaScript.
 $cookie_name = "debug_session_id";
-$cookie_value = "KEY_4_XSS_C00KIE_FTW";
+$cookie_value = "KEY_3_XSS_C00KIE_FTW";
 setcookie($cookie_name, $cookie_value, time() + 3600, "/");
 
 // Incluye la configuración de la base de datos.
