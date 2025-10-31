@@ -7,5 +7,3 @@ Disallow: /key_1_intro.html
 Disallow: /backup_pssw.txt
 Disallow: /images/
 Disallow: /hash.txt
-
-Disallow: /admin_memo.html
