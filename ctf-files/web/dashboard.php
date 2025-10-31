@@ -66,7 +66,7 @@ $conn->close();
             
             <div class="content-box" style="margin-bottom: 2rem;">
                 <h2>Acceso Confirmado</h2>
-                <p>Tu clave de API interna (KEY_3) para el acceso a la base de datos es:</p>
+                <p>Tu clave de API interna (KEY_2) para el acceso a la base de datos es:</p>
                 <div class="message success">
                     <h3 style="text-align: center; margin: 0; font-family: 'Courier New', monospace;">
                         <?php echo $secret_key; ?>
