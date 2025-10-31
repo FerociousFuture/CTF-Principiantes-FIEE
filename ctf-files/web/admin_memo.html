@@ -36,13 +36,6 @@
                 <p><strong>Asunto:</strong> Corrección de vulnerabilidad XSS en el blog</p>
                 <p>Como saben, nuestro blog fue vulnerado la semana pasada. Un atacante logró publicar un script que robaba los <strong>cookies de sesión de administrador</strong> (`admin_session`) de los moderadores que revisaban los comentarios.</p>
                 <p>Ya hemos mitigado el robo de cookies aplicando el flag `HttpOnly`.</p>
-                
-                <div class="clave-box">
-                    <h3>Acción Requerida</h3>
-                    <p>Por compatibilidad con el sistema antiguo, el token de sesión (`admin_session`) **aún se está guardando en el `localStorage` del navegador** después de un inicio de sesión de administrador.</p>
-                    <p>El próximo equipo debe eliminar esta lógica. Mientras tanto, si pueden confirmar la vulnerabilidad XSS en el blog, la variable es "document.cookie". Este parece ser el vector para lograr el ataque.</p>
-                    <p>Trataremos de cancelar todos los comandos alert(), cualquier administrador en servicio debera reportarlo.</p>
-                </div>
 
             </div> 
         </div> 
