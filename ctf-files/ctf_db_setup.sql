@@ -33,7 +33,7 @@ INSERT INTO users (username, password_hash, role, secret_key) VALUES (
     'admin', 
     '81dc9bdb52d04dc20036dbd8313ed055', 
     'administrator', 
-    'KEY_3_SQLi_W0N' -- ¡Clave 3 del CTF!
+    'KEY_2_SQLi_W0N' -- ¡Clave 3 del CTF!
 );
 
 -- 5. Insertar un usuario normal
